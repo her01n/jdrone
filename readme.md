@@ -29,3 +29,6 @@ Now you can run *make* to generate *stl* files.
 make
 ```
 
+## Photo
+
+![GOPR0438](https://github.com/user-attachments/assets/ddfe4e0a-a48e-4cba-bf41-8f1bcfa9a0f2)
