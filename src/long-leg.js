@@ -54,6 +54,7 @@ const screwNegative = union(
 const screwsSunwise = [[0, 0], [10*Math.sqrt(2)/2, 10*Math.sqrt(2)/2]]
 const screwsWiddershins = [[0, 0], [-10*Math.sqrt(2)/2, 10*Math.sqrt(2)/2]]
 const screwsCross = [[-5, 2.5], [5, 2.5]]
+const screwsDiagonal = [[-10*Math.sqrt(2)/2, 4], [10*Math.sqrt(2)/2, 4]]
 const positionScrews = (screw, orientation) => {
   if (orientation == "s") {
     ts = screwsSunwise
@@ -61,6 +62,8 @@ const positionScrews = (screw, orientation) => {
     ts = screwsWiddershins
   } else if (orientation == "c") {
     ts = screwsCross
+  } else if (orientation == "d") {
+    ts = screwsDiagonal
   }
   return translateY(length,
     rotateX(Math.PI/2 - angle,

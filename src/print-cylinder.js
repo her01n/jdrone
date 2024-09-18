@@ -1,6 +1,6 @@
 const { subtract, union } = require('@jscad/modeling').booleans
 const { hull } = require('@jscad/modeling').hulls
-const { cuboid, cylinder } = require('@jscad/modeling').primitives
+const { cuboid, cylinder, sphere } = require('@jscad/modeling').primitives
 const { mirrorZ, rotate, rotateZ, translate, translateY, translateZ } = require('@jscad/modeling').transforms
 
 const box = (width, length, height) => {
@@ -10,8 +10,9 @@ const box = (width, length, height) => {
   return cuboid({size: [width, length, height], center: [width/2, length/2, height/2] })
 }
 
+const alpha = 45 *2*Math.PI/360;
+
 const printCylinder = (radius, length) => {
-  const alpha = 45 *2*Math.PI/360;
   const b = radius*((1 - Math.sin(alpha)) / Math.cos(alpha));
   return hull(
     rotate([-Math.PI/2, 0, 0], cylinder({ radius: radius, height: length, center: [0, 0, length/2] })),
@@ -19,12 +20,18 @@ const printCylinder = (radius, length) => {
 }
 
 const printCylinderCut = (radius, length) => {
-  const alpha = 45 *2*Math.PI/360;
   const b = radius*((1 - Math.sin(alpha)) / Math.cos(alpha));
   return hull(
     rotate([-Math.PI/2, 0, 0], cylinder({ radius: radius, height: length, center: [0, 0, length/2] })),
     translate([-b, 0, 0], box(b*2, length, radius)))
 }
 
-module.exports = { printCylinder, printCylinderCut }
+const sphereCut = (radius) => {
+  const b = radius*((1 - Math.sin(alpha)) / Math.cos(alpha));
+  return hull(
+    sphere({ radius: radius }),
+    cylinder({ radius: b, height: radius, center: [0, 0, radius/2] }))
+}
+
+module.exports = { printCylinder, printCylinderCut, sphereCut }
 
