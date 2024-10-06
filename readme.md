@@ -14,6 +14,12 @@ The motors are attached by 16*16mm M3 screws.
 Flight controller is installed in 30.5x30.5 mm mounting, installing the stack is possible.
 Receiver with dimensions 16x11mm can be added.
 
+## Layout preview
+
+![Layout preview](https://raw.githubusercontent.com/her01n/jdrone/refs/heads/main/preview.png)
+
+[View 3d model.](https://github.com/her01n/jdrone/blob/main/stl/preview.stl)
+
 ## Compile
 
 Install *node*, *make* and *@jscad/cli* package, example for arch:
