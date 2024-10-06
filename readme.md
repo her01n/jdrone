@@ -8,6 +8,12 @@ No support is necessary, bridges and overhangs are kept short.
 The build plate of 120x120 mm is necesary.
 I recommend to print the parts with ABS.
 
+We use M3x4x5 thread inserts and M3x8 button head screws
+to connect the parts of the frame.
+All parts are connected with minimum of two screws.
+The motors are also connected with M3x8 screws.
+The stack connects with four M3x20 button head screws.
+
 The quadcopter is measured about 257mm diagonally,
 and can handle propellers with 180mm diameter.
 The motors are attached by 16*16mm M3 screws.
