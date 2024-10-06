@@ -74,20 +74,23 @@ const motorNegative = cylinder({ radius: 15, height: 30, center: [0, 0, motorHei
 
 // TODO calculate the y and angle values
 const eyeletTR = [[[0, 60, 8.5], [-0.1, 0, 0]], [[0, 30, 14.6], [-0.2, 0, 0]]]
+
+const linkLength = 100 - radius - 4
     
+const arm = subtract(
+  union(
+    centerPositive,
+    link(connectWidth, connectDiameter + connectDistance, 8, 5, linkLength),
+    eyeletTR.map((tr) => { return translate(tr[0], rotate(tr[1], eyeletPositive())) }),
+    translateY(100, motor)),
+  union(
+    centerNegative,
+    eyeletTR.map((tr) => { return translate(tr[0], rotate(tr[1], eyeletNegative())) }),
+    translateY(100, motorNegative)))
+
 const main = () => {
-  const linkLength = 100 - radius - 4
-  return subtract(
-    union(
-      centerPositive,
-      link(connectWidth, connectDiameter + connectDistance, 8, 5, linkLength),
-      eyeletTR.map((tr) => { return translate(tr[0], rotate(tr[1], eyeletPositive())) }),
-      translateY(100, motor)),
-    union(
-      centerNegative,
-      eyeletTR.map((tr) => { return translate(tr[0], rotate(tr[1], eyeletNegative())) }),
-      translateY(100, motorNegative)))
+  return arm
 }
 
-module.exports = { main }
+module.exports = { arm, main }
 

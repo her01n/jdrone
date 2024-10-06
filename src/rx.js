@@ -38,13 +38,14 @@ const pcbNegative =
       size: [width - overhang*2, 100, 100],
       center: [0, wall + 50, 0] }))
 
-const rx = subtract(
-  union(screwsPositive, pcbPositive),
-  union(screwsNegative, pcbNegative))
+const rx = translateY(-screwY,
+  subtract(
+    union(screwsPositive, pcbPositive),
+    union(screwsNegative, pcbNegative)))
 
 const main = () => {
   return rx
 }
 
-module.exports = { main }
+module.exports = { rx, main }
 

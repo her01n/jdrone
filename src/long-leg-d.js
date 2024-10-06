@@ -1,7 +1,9 @@
 const { longLeg } = require('./long-leg')
 
+const longLegD = longLeg("d")
+
 const main = () => {
-  return longLeg("d")
+  return longLegD
 }
 
-module.exports = { main }
+module.exports = { longLegD, main }

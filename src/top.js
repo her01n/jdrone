@@ -34,5 +34,5 @@ const main = () => {
   return top
 }
 
-module.exports = { main }
+module.exports = { main, top }
 

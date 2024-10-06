@@ -88,5 +88,5 @@ const main = () => {
   return longLeg("s")
 }
 
-module.exports = { longLeg, main }
+module.exports = { angle, height, longLeg, main }
 

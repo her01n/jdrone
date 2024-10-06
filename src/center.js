@@ -12,7 +12,6 @@ const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } 
 
 // TODO
 // - [ ] lower height to 25mm, that should be enough
-// - [ ] Add some walls near pillars to make them stronger
 // - [ ] Add a screw to reinforce layer adhesion near pillars
 // - [ ] arrow somewhere also on top
 //       visible when the controller is installed
@@ -57,9 +56,10 @@ const pillarNegative = () => {
 
 const length = 80
 const width = 60
+const armRadius = width/2 + 10
 
 const pillarT = [width/2, length/2]
-const armT = [width/2 + 10, width/2 + 10]
+const armT = [armRadius, armRadius]
 
 const cornersPositive = fourWayMirror(
   hull(translate(pillarT, pillarPositive()), translate(armT, armPositive())))
@@ -107,5 +107,5 @@ const main = () => {
   return center
 }
 
-module.exports = { center, main }
+module.exports = { armRadius, center, width, length, height, main }
 
