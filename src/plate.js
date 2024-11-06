@@ -42,14 +42,23 @@ const cross = (length, width) => {
 }
 
 const plate = (length, width) => {
+  const sideBatteryNegativeHalf = cuboid({
+    center: [width/2 - 4 - batteryWidth/2, 0, 0],
+    size: [batteryWidth, batteryLength, 8] })
+  if (width - 8 < batteryPitch + 2*batteryWidth) {
+    sideBatteryNegative = union(sideBatteryNegativeHalf, mirrorX(sideBatteryNegativeHalf))
+  } else {
+    sideBatteryNegative = cuboid({ size: [0, 0, 0] })
+  }
+
   return subtract(
     union(batteryPositive, walls(length, width), cross(length, width)),
-    union(batteryNegative, arrowNegative))
+    union(batteryNegative, sideBatteryNegative, arrowNegative))
 }
 
 const main = () => {
   return plate(80, 60)
 }
 
-module.exports = { plate, main }
+module.exports = { batteryLength, batteryWidth, plate, main }
 

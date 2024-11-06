@@ -5,17 +5,17 @@ const { mirrorX, mirrorY, mirrorZ, rotate, rotateZ, translate, translateX, trans
 
 const { arrowCut } = require('./arrow')
 const { eyeletCornerPositive, eyeletCornerNegative } = require('./eyelet')
-const { plate } = require('./plate')
+const { batteryLength, batteryWidth, plate } = require('./plate')
 const { printCylinder, printCylinderCut } = require('./print-cylinder')
 const { fourWayMirror, fourWayRotate } = require('./symmetries')
 const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
 
 // TODO
-// - [ ] lower height to 25mm, that should be enough
 // - [ ] Add a screw to reinforce layer adhesion near pillars
 // - [ ] arrow somewhere also on top
 //       visible when the controller is installed
-// - [ ] motor numbers, rotations
+// - [ ] rotations
+// - [ ] motor numbers
 
 connectDiameter = 10
 connectDistance = 15
@@ -55,14 +55,17 @@ const pillarNegative = () => {
 }
 
 const length = 80
-const width = 60
-const armRadius = width/2 + 10
+const width = 40
+const armRadius = width/2 + 9
 
 const pillarT = [width/2, length/2]
 const armT = [armRadius, armRadius]
 
 const cornersPositive = fourWayMirror(
-  hull(translate(pillarT, pillarPositive()), translate(armT, armPositive())))
+  hull(
+    translate(pillarT, pillarPositive()),
+    translate(armT, armPositive()),
+    cylinder({ radius: 2, height: height, center: [width/2 + 2, armRadius + 2, height/2] })))
 const cornersNegative = fourWayMirror(
   union(translate(pillarT, pillarNegative()), translate(armT, armNegative)))
  
@@ -76,24 +79,25 @@ const lAngle = (length) => {
 const lAngleRect = (length, width) => {
   return fourWayMirror(
     union(
-      translateX(width/2 - lAngleSize/2, lAngle(length/2)),
-      translateY(length/2 - lAngleSize/2, rotateZ(Math.PI/2, lAngle(width/2)))))
+      translateX(width/2 - lAngleSize/2, lAngle(length/2 - lAngleSize/2)),
+      translateY(length/2 - lAngleSize/2, rotateZ(Math.PI/2, lAngle(width/2 - lAngleSize/2)))))
 }
 const frame = lAngleRect(length + 8, width + 8)
 
 const bottom = plate(length, width)
 
+const eyeletsY = length/2 - 13
 const eyeletsPositive = fourWayMirror(
-  translate([width/2, length/2 - 4, 8],
+  translate([width/2, eyeletsY, 8],
     rotateZ(-Math.PI/2,
       eyeletCornerPositive(4, 2))))
 const eyeletsNegative = fourWayMirror(
-  translate([width/2, length/2 - 4, 8],
+  translate([width/2, eyeletsY, 8],
     rotateZ(-Math.PI/2,
       eyeletCornerNegative(4))))
 
 const threadInsertsTs = [
-  [30.5/2, 30.5/2], [width/2, 20], [width/2, 30], [20, length/2], [20, 20], [10, 30]];
+  [30.5/2, 30.5/2], [width/2, length/2 - 10], [width/2 - 10, length/2], [20, 20], [10, 30]];
 const threadInsertsPositive = fourWayMirror(
   union(threadInsertsTs.map((t) => { return translate(t, threadInsertPositive()) })))
 const threadInsertsNegative = fourWayMirror(

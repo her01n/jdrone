@@ -1,5 +1,5 @@
 default: stl/arm.stl stl/center.stl stl/long-leg-c.stl stl/long-leg-d.stl \
-    stl/preview.stl stl/rx.stl stl/top.stl
+    stl/preview.stl stl/rx.stl stl/top.stl preview.png
 
 clean:
 	rm -rf stl/*
@@ -18,4 +18,7 @@ stl/top.stl: src/top.js src/arrow.js src/hulls.js src/plate.js
 stl/%.stl: src/%.js
 	npx jscad $< -o $@
 
+preview.png: stl/preview.stl
+	f3d $< --output $@ --axis=false --grid=false --hdri-ambient \
+	  --ambient-occlusion --anti-aliasing --tone-mapping --filename=false
 

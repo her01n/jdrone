@@ -8,7 +8,7 @@ const { hullRing } = require('./hulls')
 const { plate } = require('./plate')
 
 const length = 80
-const width = 60
+const width = 40
 
 const screwThickness = 2.4
 const screwPositive = cylinder({ radius: 4, height: screwThickness, center: [0, 0, screwThickness/2] })
