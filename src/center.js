@@ -41,7 +41,7 @@ const armNegative = union(
   armScrews(threadInsertPrintNegative(4)),
   hull(a, a))
 
-const height = 30
+const height = 25
 
 const pillarPositive = () => {
   return cylinder({ radius: 4, height: height, center: [0, 0, height/2]})
