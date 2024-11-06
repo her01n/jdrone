@@ -38,7 +38,7 @@ const a = armScrews(mirrorY(union(
   printCylinder(connectDiameter / 2 + 0.1, 99),
   printCylinderCut(connectDiameter / 2 + 0.1, 99))))
 const armNegative = union(
-  armScrews(translateY(1, threadInsertPrintNegative(4))),
+  armScrews(threadInsertPrintNegative(4)),
   hull(a, a))
 
 const height = 30

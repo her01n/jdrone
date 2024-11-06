@@ -1,0 +1,21 @@
+# TODO
+
+- new core
+  - [x] arm thread inserts should be at the surface, not deep in the plastic
+  - [ ] less tall, down to 20mm, or 25mm?
+  - [ ] narrower - down to 40mm?
+  - [ ] model narrower top
+  - [ ] inter layer reinforcement screws
+    best would be M2x25 countersunk - are there such screws?
+  - [ ] rename center to core
+
+- rename long-leg-d to long-leg-diagonal
+  and long-leg-c to long-leg-cross
+- use node build system instead of make
+- add bill of materials
+  - printed parts
+  - thread inserts and screws
+  - electronic parts
+  - propellers
+- use some kind of lint to check the code
+  - unused imports - requires
