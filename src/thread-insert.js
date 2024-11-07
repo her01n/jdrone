@@ -23,9 +23,10 @@ const threadInsertNegative = ({ outerDiameter = 5, insertLength = 4, screwDiamet
   const diameter = outerDiameter - 0.3
   const h = insertLength + 0.1
   const screw = screwDiameter + 0.2
+  const t = (diameter - screw) / 2
   return union(
     hull(
-      cylinder({ radius: diameter/2, height: screw, center: [0, 0, screw/2] }),
+      cylinder({ radius: diameter/2, height: h - t, center: [0, 0, (h - t)/2] }),
       cylinder({ radius: screw/2, height: h, center: [0, 0, h/2] })),
     hull(
       cylinder({ radius: diameter/2 + lead, height: 0.001, center: [0, 0, 0.001 / 2] }),
