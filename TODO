@@ -1,12 +1,6 @@
 # TODO
 
-- new core
-  - [x] arm thread inserts should be at the surface, not deep in the plastic
-  - [x] less tall, down to 20mm, or 25mm?
-  - [x] narrower - down to 40mm?
-  - [ ] inter layer reinforcement screws
-    best would be M2x25 countersunk - are there such screws?
-  - [ ] rename center to core
+- add thread inserts for 20mm stack
 
 - rename long-leg-d to long-leg-diagonal
   and long-leg-c to long-leg-cross

@@ -103,13 +103,13 @@ const threadInsertsPositive = fourWayMirror(
 const threadInsertsNegative = fourWayMirror(
   union(threadInsertsTs.map((t) => { return translate(t, threadInsertNegative(6)) })))
 
-const center = subtract(
+const core = subtract(
   union(cornersPositive, frame, eyeletsPositive, bottom, threadInsertsPositive,),
   union(cornersNegative, eyeletsNegative, threadInsertsNegative))
 
 const main = () => {
-  return center
+  return core
 }
 
-module.exports = { armRadius, center, width, length, height, main }
+module.exports = { armRadius, core, width, length, height, main }
 

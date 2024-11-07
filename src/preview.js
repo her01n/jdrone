@@ -6,7 +6,7 @@ const { mirrorX, mirrorY, mirrorZ, rotate, rotateX, rotateY, rotateZ, translate,
 // - rotate rx
 
 arm = require('./arm')
-center = require('./center')
+core = require('./core')
 longLeg = require('./long-leg')
 longLegD = require('./long-leg-d')
 rx = require('./rx')
@@ -14,7 +14,7 @@ top = require('./top')
 
 const d = 8
 
-const armRadius = center.armRadius
+const armRadius = core.armRadius
 
 const legT = Math.tan(longLeg.angle)*longLeg.height +
   (8 - 10*Math.sqrt(2)/2)*Math.sin(longLeg.angle)
@@ -22,18 +22,18 @@ const leg = translate([0, legT, -longLeg.height - d],
   rotateX(Math.PI/2 + longLeg.angle, longLegD.longLegD))
   
 const topAngle = Math.PI/6;
-const topZ = center.height + d + center.width/2*Math.sin(topAngle)
+const topZ = core.height + d + core.width/2*Math.sin(topAngle)
 
 preview = union(
-  center.center,
+  core.core,
   translate([armRadius, armRadius], rotateZ(-Math.PI/4, translateX(d, arm.arm))),
   translate([-armRadius, armRadius], rotateZ(Math.PI/4, translateX(-d, arm.arm))),
   translate([armRadius, -armRadius], rotateZ(-3*Math.PI/4, translateX(-d, arm.arm))),
   translate([-armRadius, -armRadius], rotateZ(3*Math.PI/4, translateX(d, arm.arm))),
-  translate([center.width/2, center.length/2], rotateZ(-Math.PI/4, leg)),
-  translate([-center.width/2, center.length/2], rotateZ(Math.PI/4, leg)),
-  translate([center.width/2, -center.length/2], rotateZ(-3*Math.PI/4, leg)),
-  translate([-center.width/2, -center.length/2], rotateZ(3*Math.PI/4, leg)),
+  translate([core.width/2, core.length/2], rotateZ(-Math.PI/4, leg)),
+  translate([-core.width/2, core.length/2], rotateZ(Math.PI/4, leg)),
+  translate([core.width/2, -core.length/2], rotateZ(-3*Math.PI/4, leg)),
+  translate([-core.width/2, -core.length/2], rotateZ(3*Math.PI/4, leg)),
   translate([0, 30, 4.1 + d], rotateZ(Math.PI, rx.rx)),
   translate([0, 0, topZ], rotateY(-topAngle, top.top)))
 
