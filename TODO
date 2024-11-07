@@ -1,6 +1,10 @@
 # TODO
 
-- add thread inserts for 20mm stack
+- larger thread inserts in pillars
+  for possibility of interlayer reinforments M3x16 screw in the pillar
+  lets order M3x8x5 thread inserts
+  - [ ] make thread holes in pillars for M3x8x5 inserts
+  - [ ] adjust the top width so 16 mm long screw would fit
 
 - rename long-leg-d to long-leg-diagonal
   and long-leg-c to long-leg-cross
@@ -12,3 +16,4 @@
   - propellers
 - use some kind of lint to check the code
   - unused imports - requires
+- add thread insert around the frame, each 10mm?

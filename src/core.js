@@ -101,11 +101,17 @@ const threadInsertsTs = [
 const threadInsertsPositive = fourWayMirror(
   union(threadInsertsTs.map((t) => { return translate(t, threadInsertPositive()) })))
 const threadInsertsNegative = fourWayMirror(
-  union(threadInsertsTs.map((t) => { return translate(t, threadInsertNegative(6)) })))
+  union(threadInsertsTs.map((t) => { return translate(t, threadInsertNegative({ screwLength: 6 })) })))
+
+const smallStackThreadInsert = { screwDiameter: 2, insertLength: 3, outerDiameter: 3.5 }
+const smallStackPositive =
+  fourWayMirror(translate([10, 10], threadInsertPositive(smallStackThreadInsert)))
+const smallStackNegative =
+  fourWayMirror(translate([10, 10], threadInsertNegative(smallStackThreadInsert)))
 
 const core = subtract(
-  union(cornersPositive, frame, eyeletsPositive, bottom, threadInsertsPositive,),
-  union(cornersNegative, eyeletsNegative, threadInsertsNegative))
+  union(cornersPositive, frame, eyeletsPositive, bottom, threadInsertsPositive, smallStackPositive),
+  union(cornersNegative, eyeletsNegative, threadInsertsNegative, smallStackNegative))
 
 const main = () => {
   return core

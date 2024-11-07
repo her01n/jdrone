@@ -11,11 +11,18 @@ const screw = 3.2;
 const wall = 1.2;
 const lead = 0.2;
 
-const threadInsertPositive = () => {
-  return cylinder({radius: diameter/2 + wall, height: h + wall, center: [0, 0, (h + wall)/2]});
+const threadInsertPositive = ({ outerDiameter = 5, insertLength = 4 } = {}) => {
+  const height = insertLength + 0.1 + wall
+  return cylinder({
+    radius: (outerDiameter - 0.3)/2 + wall,
+    height: height,
+    center: [0, 0, height/2]});
 }
 
-const threadInsertNegative = (screwLength = 16) => {
+const threadInsertNegative = ({ outerDiameter = 5, insertLength = 4, screwDiameter = 3, screwLength = 16 } = {}) => {
+  const diameter = outerDiameter - 0.3
+  const h = insertLength + 0.1
+  const screw = screwDiameter + 0.2
   return union(
     hull(
       cylinder({ radius: diameter/2, height: screw, center: [0, 0, screw/2] }),
