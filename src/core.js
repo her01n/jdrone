@@ -11,7 +11,6 @@ const { fourWayMirror, fourWayRotate } = require('./symmetries')
 const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
 
 // TODO
-// - [ ] Add a screw to reinforce layer adhesion near pillars
 // - [ ] arrow somewhere also on top
 //       visible when the controller is installed
 // - [ ] rotations
@@ -38,7 +37,7 @@ const a = armScrews(mirrorY(union(
   printCylinder(connectDiameter / 2 + 0.1, 99),
   printCylinderCut(connectDiameter / 2 + 0.1, 99))))
 const armNegative = union(
-  armScrews(threadInsertPrintNegative(4)),
+  armScrews(threadInsertPrintNegative(6)),
   hull(a, a))
 
 const height = 25
