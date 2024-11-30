@@ -6,6 +6,7 @@ const { mirrorX, mirrorY, mirrorZ, rotate, rotateZ, translate, translateX, trans
 const { arrowCut } = require('./arrow')
 const { hullRing } = require('./hulls')
 const { plate } = require('./plate')
+const { xx, yy } = require('./symmetries')
 
 const length = 80
 const width = 40
@@ -26,10 +27,30 @@ const screwsNegative =
 
 const bottom = plate(length, width)
 
+const stripLength = 22
+const stripWall = 2.4
+
+const stripY = stripLength/2 + stripWall;
+
+const stripPositive = xx(union(
+  cuboid({
+    size: [5, 2*stripY, stripWall],
+    center: [width/2 + 4 + 5/2, 0, stripWall/2] }),
+  yy(cylinder({ radius: 5/2, height: stripWall, center: [width/2 + 4 + 5/2, stripY, stripWall/2] })),
+  subtract(
+    cuboid({
+      size: [5/2, stripLength + 2*stripWall + 2*5, stripWall],
+      center: [width/2 + 4 + 5/4, 0, stripWall/2] }),
+    yy(cylinder({ radius: 5/2, height: stripWall, center: [width/2 + 4 + 5/2, stripY + 5, stripWall/2] })))))
+
+const stripNegative = xx(cuboid({
+  size: [5, stripLength, stripWall],
+  center: [width/2 + 4 - 2.4 + 5/2, 0, stripWall/2] }))
+
 const top =
   subtract(
-    union(bottom, screwsPositive),
-    union(screwsNegative))
+    union(bottom, screwsPositive, stripPositive),
+    union(screwsNegative, stripNegative))
 
 const main = () => {
   return top
