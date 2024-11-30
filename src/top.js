@@ -10,9 +10,10 @@ const { plate } = require('./plate')
 const length = 80
 const width = 40
 
-const screwThickness = 2.4
-const screwPositive = cylinder({ radius: 4, height: screwThickness, center: [0, 0, screwThickness/2] })
-const screwConnect = cylinder({ radius: 3, height: screwThickness, center: [0, 0, screwThickness/2] })
+const frameThickness = 2.4
+const screwThickness = 5
+const screwPositive = cylinder({ radius: 3, height: screwThickness, center: [0, 0, screwThickness/2] })
+const screwConnect = cylinder({ radius: 3, height: frameThickness, center: [0, 0, frameThickness/2] })
 const screwNegative = cylinder({ radius: 3.2 / 2, height: 20 })
 
 const screwsTs = [[width/2, length/2], [-width/2, length/2], [-width/2, -length/2], [width/2, -length/2]]
