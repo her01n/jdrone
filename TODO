@@ -18,4 +18,7 @@
   - propellers
 - use some kind of lint to check the code
   - unused imports - requires
+- add arrow to core visible also when control is mounted
+- label motor rotations
+- label motor numbers
 - add thread insert around the frame, each 10mm?

@@ -10,12 +10,6 @@ const { printCylinder, printCylinderCut } = require('./print-cylinder')
 const { fourWayMirror, fourWayRotate } = require('./symmetries')
 const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
 
-// TODO
-// - [ ] arrow somewhere also on top
-//       visible when the controller is installed
-// - [ ] rotations
-// - [ ] motor numbers
-
 connectDiameter = 10
 connectDistance = 15
 connectWidth = 4
