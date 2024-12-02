@@ -1,9 +1,7 @@
 const { subtract, union } = require('@jscad/modeling').booleans
 const { mirrorX, mirrorY, mirrorZ, rotate, rotateX, rotateY, rotateZ, translate, translateX, translateY, translateZ } = require('@jscad/modeling').transforms
 
-// TODO
-// - rotate the top so the rx is visible?
-// - rotate rx
+const { fourWayMirror } = require('./symmetries')
 
 arm = require('./arm')
 core = require('./core')
@@ -13,8 +11,6 @@ rx = require('./rx')
 top = require('./top')
 
 const d = 8
-
-const armRadius = core.armRadius
 
 const legT = Math.tan(longLeg.angle)*longLeg.height +
   (8 - 10*Math.sqrt(2)/2)*Math.sin(longLeg.angle)
@@ -26,10 +22,8 @@ const topZ = core.height + d + core.width/2*Math.sin(topAngle)
 
 preview = union(
   core.core,
-  translate([armRadius, armRadius], rotateZ(-Math.PI/4, translateX(d, arm.arm))),
-  translate([-armRadius, armRadius], rotateZ(Math.PI/4, translateX(-d, arm.arm))),
-  translate([armRadius, -armRadius], rotateZ(-3*Math.PI/4, translateX(-d, arm.arm))),
-  translate([-armRadius, -armRadius], rotateZ(3*Math.PI/4, translateX(d, arm.arm))),
+  fourWayMirror(
+    translate(core.armT, rotateZ(core.armAlpha - Math.PI/2, translateX(d, arm.arm)))),
   translate([core.width/2, core.length/2], rotateZ(-Math.PI/4, leg)),
   translate([-core.width/2, core.length/2], rotateZ(Math.PI/4, leg)),
   translate([core.width/2, -core.length/2], rotateZ(-3*Math.PI/4, leg)),

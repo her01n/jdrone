@@ -1,10 +1,5 @@
 # TODO
 
-- stronger arm connection.
-  put the thread insert from the other side,
-  so there is plastic between thread insert and the arm.
-  make arms asymetric
-
 - rename long-leg-d to long-leg-diagonal
   and long-leg-c to long-leg-cross
 - use node build system instead of make

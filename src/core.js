@@ -13,26 +13,23 @@ const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } 
 connectDiameter = 10
 connectDistance = 15
 connectWidth = 4
+connectThickness = 6
+connectThreadInsertY = 5.4
 
-const armScrews = (child) => {
-  return translateY(connectWidth/2,
-    rotateZ(Math.PI/4,
-      union(
-        translateZ(connectDiameter/2, child),
-        translateZ(connectDiameter/2 + connectDistance, child))))
-}
+const armPositive = hull(
+  translateZ(connectDiameter/2, printCylinder(connectDiameter / 2, connectThickness)),
+  translateZ(connectDiameter/2 + connectDistance, printCylinderCut(connectDiameter / 2, connectThickness)))
 
-const armPositive = () => {
-  s = armScrews(printCylinder(connectDiameter / 2, 6))
-  return hull(s, s)
-}
-
-const a = armScrews(mirrorY(union(
-  printCylinder(connectDiameter / 2 + 0.1, 99),
-  printCylinderCut(connectDiameter / 2 + 0.1, 99))))
 const armNegative = union(
-  armScrews(threadInsertPrintNegative(6)),
-  hull(a, a))
+  translate([0, connectThreadInsertY, connectDiameter/2],
+    mirrorY(threadInsertPrintNegative())),
+  translate([0, connectThreadInsertY, connectDiameter/2 + connectDistance],
+    mirrorY(threadInsertPrintNegative())),
+  hull(
+    translateZ(connectDiameter/2,
+      mirrorY(printCylinder(connectDiameter/2 + 0.1, connectWidth))),
+    translateZ(connectDiameter/2 + connectDistance,
+      mirrorY(printCylinderCut(connectDiameter/2 + 0.1, connectWidth)))))
 
 const height = 25
 
@@ -49,19 +46,28 @@ const pillarNegative = () => {
 
 const length = 80
 const width = 40
-const armRadius = width/2 + 9
 
 const pillarT = [width/2, length/2]
-const armT = [armRadius, armRadius]
+const armT = [width/2 + 4 + 5, length/2]
+
+const armAlpha =
+  Math.PI/4 - Math.asin(Math.sqrt(2)*(armT[1] - armT[0])/2/Math.sqrt(2*2 + 100*100)) +
+  Math.atan2(2, 100)
 
 const cornersPositive = fourWayMirror(
   hull(
     translate(pillarT, pillarPositive()),
-    translate(armT, armPositive()),
-    cylinder({ radius: 2, height: height, center: [width/2 + 2, armRadius + 2, height/2] })))
+    translate(armT, rotateZ(armAlpha, armPositive))))
 const cornersNegative = fourWayMirror(
-  union(translate(pillarT, pillarNegative()), translate(armT, armNegative)))
- 
+  union(translate(pillarT, pillarNegative()), translate(armT, rotateZ(armAlpha, armNegative))))
+
+const armTest = translate(armT, rotateZ(armAlpha,
+  cuboid({ size: [100, 4, 1], center: [50, -2, 0.5] })))
+const diagonalTest = rotateZ(Math.PI/4, cuboid({ size: [400, 0.1, 0.1] }))
+
+const test = []
+// const test = union(armTest, diagonalTest)
+
 const lAngleSize = 8;
 const lAngleThickness = 4;
 const lAngle = (length) => {
@@ -79,7 +85,7 @@ const frame = lAngleRect(length + 8, width + 8)
 
 const bottom = plate(length, width)
 
-const eyeletsY = length/2 - 13
+const eyeletsY = length/2 - 6
 const eyeletsPositive = fourWayMirror(
   translate([width/2, eyeletsY, 8],
     rotateZ(-Math.PI/2,
@@ -103,12 +109,12 @@ const smallStackNegative =
   fourWayMirror(translate([10, 10], threadInsertNegative(smallStackThreadInsert)))
 
 const core = subtract(
-  union(cornersPositive, frame, eyeletsPositive, bottom, threadInsertsPositive, smallStackPositive),
+  union(cornersPositive, frame, eyeletsPositive, bottom, threadInsertsPositive, smallStackPositive, test),
   union(cornersNegative, eyeletsNegative, threadInsertsNegative, smallStackNegative))
 
 const main = () => {
   return core
 }
 
-module.exports = { armRadius, core, width, length, height, main }
+module.exports = { armT, armAlpha, core, width, length, height, main }
 
