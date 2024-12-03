@@ -11,8 +11,8 @@ const screw = 3.2;
 const wall = 1.2;
 const lead = 0.2;
 
-const threadInsertPositive = ({ outerDiameter = 5, insertLength = 4 } = {}) => {
-  const height = insertLength + 0.1 + wall
+const threadInsertPositive = ({ outerDiameter = 5, insertLength = 4, constrainHeight = 999 } = {}) => {
+  const height = Math.min(constrainHeight, insertLength + 0.1 + wall)
   return cylinder({
     radius: (outerDiameter - 0.3)/2 + wall,
     height: height,
