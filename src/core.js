@@ -40,8 +40,8 @@ const pillarPositive = () => {
 const pillarNegative = () => {
   return union(
     cylinder({ radius: 3.2/2, height: height, center: [0, 0, height/2]}),
-    threadInsertNegative({ insertLength: 8 }),
-    translateZ(height, mirrorZ(threadInsertNegative({ insertLength: 8 }))))
+    threadInsertNegative(),
+    translateZ(height, mirrorZ(threadInsertNegative())))
 }
 
 const length = 80

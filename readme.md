@@ -17,7 +17,7 @@ The stack connects with four M3x20 button head screws.
 The quadcopter is measured about 257mm diagonally,
 and can handle propellers with 180mm diameter.
 The motors are attached by 16*16mm M3 screws.
-Flight controller is installed in 30.5x30.5 mm mounting, installing the stack is possible.
+Flight controller is installed in 30.5x30.5mm or 20x20mm mounting, installing the stack is possible.
 Receiver with dimensions 16x11mm can be added.
 
 ## Layout preview
@@ -25,6 +25,45 @@ Receiver with dimensions 16x11mm can be added.
 ![Layout preview](https://raw.githubusercontent.com/her01n/jdrone/refs/heads/main/preview.png)
 
 [View 3d model.](https://github.com/her01n/jdrone/blob/main/stl/preview.stl)
+
+## BOM
+
+Printed parts
+
+- 1x core
+- 1x top
+- 4x arm
+- 4x long-leg-d
+
+Connectors
+
+- 20x M3x5x4 thread inserts. Thread M3, outer diameter 5mm, length 4mm.
+- 24x M3x8 button head screws. Thread M3, length 8mm. Any head if not countersunk should work.
+- 4x M3x25 button head screws.
+
+Other parts necessary depends on the stack and optionally radio used:
+
+### 20mm stack
+
+- 1x flight controller and 1x ESC with 4 mounting holes of 3mm diameter,
+  layed out in a square with a 20mm long side.
+- 4x M2x4x3.2 thread set inserts. Inner diameter is 2mm, length 4mm and outer diameter 3.2mm.
+- 8x M2/M3 silicone pads, 6-7mm long
+- 4x M2x16 screws
+
+### 30.5mm stack
+
+- 1x flight controller and 1x ESC with 4 mounting holes of 4mm diameter,
+  layed out in a corners of a square with 30.5mm long side.
+- 8x M3/M4 silicone pads, 8mm long.
+- 4x M3x5x4 thread inserts.
+- 4x M3x20 button head screws.
+
+### 16x11 mm radio
+
+- 1x pcb radio with dimensions 16x11mm.
+- 2x M3x5x4 thread inserts
+- 2x M3x8 screws
 
 ## Compile
 
