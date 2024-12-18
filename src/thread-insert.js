@@ -36,9 +36,7 @@ const threadInsertNegative = ({ outerDiameter = 5, insertLength = 4, screwDiamet
 
 const threadInsertPrintNegative = (screwLength = 16) => {
   return union(
-    hull(
-      printCylinderCut(diameter / 2, screw),
-      printCylinderCut(screw / 2, h)),
+    printCylinderCut(diameter/2, 4),
     hull(
       printCylinderCut(diameter/2 + lead/2, 0.001),
       printCylinderCut(diameter/2, lead)),
