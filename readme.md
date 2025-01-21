@@ -65,6 +65,19 @@ Other parts necessary depends on the stack and optionally radio used:
 - 2x M3x5x4 thread inserts
 - 2x M3x8 screws
 
+## Gopro
+
+It's possible to add a mount for a gopro or similar action camera.
+
+Additional parts needed:
+
+- 2x M3x5x4 thread inserts.
+- 1x M5x7x8 thread insert.
+- 2x M3x8 screws.
+
+Print *gopro* model with ABS.
+Optionally print *gopro-pad* with flexible material, like TPU.
+
 ## Compile
 
 Install *node*, *make* and *@jscad/cli* package, example for arch:

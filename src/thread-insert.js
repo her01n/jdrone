@@ -5,9 +5,6 @@ const { mirrorZ, rotate, rotateZ, translate, translateX, translateY, translateZ 
 
 const { printCylinderCut } = require('./print-cylinder.js')
 
-const diameter = 4.7;
-const h = 4.1;
-const screw = 3.2;
 const wall = 1.2;
 const lead = 0.2;
 
@@ -34,7 +31,10 @@ const threadInsertNegative = ({ outerDiameter = 5, insertLength = 4, screwDiamet
     cylinder({ radius: screw/2, height: screwLength, center: [0, 0, screwLength/2] }))
 }
 
-const threadInsertPrintNegative = (screwLength = 16) => {
+const threadInsertPrintNegative = ({ outerDiameter = 5, insertLength = 4, screwDiameter = 3, screwLength = 16 } = {}) => {
+  const diameter = outerDiameter - 0.3
+  const h = insertLength + 0.1
+  const screw = screwDiameter + 0.2
   return union(
     printCylinderCut(diameter/2, 4),
     hull(

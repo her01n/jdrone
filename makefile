@@ -1,4 +1,4 @@
-default: stl/arm.stl stl/core.stl stl/gopro-pad.stl stl/long-leg-c.stl \
+default: stl/arm.stl stl/core.stl stl/gopro.stl stl/gopro-pad.stl stl/long-leg-c.stl \
     stl/long-leg-d.stl stl/preview.stl stl/rx.stl stl/top.stl preview.png
 
 clean:
@@ -7,6 +7,7 @@ clean:
 stl/arm.stl: src/arm.js src/eyelet.js src/hulls.js src/print-cylinder.js src/symmetries.js
 stl/core.stl: src/core.js src/arrow.js src/eyelet.js src/plate.js \
     src/print-cylinder.js src/symmetries.js src/thread-insert.js
+stl/gopro.stl: src/gopro.js
 stl/gopro-pad.stl: src/gopro-pad.js
 stl/long-leg-c.stl: src/long-leg-c.js src/long-leg.js
 stl/long-leg-d.stl: src/long-leg-d.js src/long-leg.js
