@@ -3,11 +3,7 @@ const { hull } = require('@jscad/modeling').hulls
 const { cuboid, cylinder, sphere } = require('@jscad/modeling').primitives
 const { mirrorX, mirrorY, mirrorZ, rotate, rotateY, rotateZ, translate, translateX, translateY, translateZ } = require('@jscad/modeling').transforms
 
-const { arrowCut } = require('./arrow')
-const { eyeletCornerPositive, eyeletCornerNegative } = require('./eyelet')
-const { batteryLength, batteryWidth, plate } = require('./plate')
 const { printCylinder, printCylinderCut } = require('./print-cylinder')
-const { fourWayMirror, fourWayRotate } = require('./symmetries')
 const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
 
 const finHeight = 15
@@ -19,7 +15,7 @@ const z = 9
 const screwRadius = 5.2 / 2
 const connectHeight = 7
 const threadInsertOuterDiameter = 12
-const threadInsertPosition = 1 + 8 + centerFinWidth/2
+const threadInsertPosition = 1 + 8 + centerFinWidth/2 + finDistance
 const screwThickness = 2
 
 const finsWidth = centerFinWidth + 2*finDistance + 2*sideFinWidth
@@ -83,5 +79,5 @@ const main = () => {
   return gopro
 }
 
-module.exports = { gopro, main } 
+module.exports = { gopro, goproConnect, goproNegative, goproPositive, main } 
 
