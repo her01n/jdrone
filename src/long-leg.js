@@ -51,10 +51,17 @@ const screwPositive =
 const screwNegative = union(
   cylinder({ radius: 3.2 / 2, height: 20 }),
   cylinder({ radius: 4.2, height: 20, center: [0, 0, 10 + screwThickness] }))
+const negative = cylinder({ radius: 6, height: 99 })
 const screwsSunwise = [[0, 0], [10*Math.sqrt(2)/2, 10*Math.sqrt(2)/2]]
 const screwsWiddershins = [[0, 0], [-10*Math.sqrt(2)/2, 10*Math.sqrt(2)/2]]
 const screwsCross = [[-5, 2.5], [5, 2.5]]
 const screwsDiagonal = [[-10*Math.sqrt(2)/2, 4], [10*Math.sqrt(2)/2, 4]]
+const negativeDiagonal = [[0, 4 + 10*Math.sqrt(2)/2]]
+const positionScrew = (screw) => {
+  return translateY(length,
+    rotateX(Math.PI/2 - angle,
+      translateY(thickness, screw)))
+}
 const positionScrews = (screw, orientation) => {
   if (orientation == "s") {
     ts = screwsSunwise
@@ -65,23 +72,28 @@ const positionScrews = (screw, orientation) => {
   } else if (orientation == "d") {
     ts = screwsDiagonal
   }
-  return translateY(length,
-    rotateX(Math.PI/2 - angle,
-      translateY(thickness,
-        union(ts.map((t) => translate(t, screw))))))
+  return positionScrew(ts.map((t) => translate(t, screw)))
+}
+const negativeScrews = (orientation) => {
+  if (orientation == "d") {
+    return positionScrew(negativeDiagonal.map((t) => translate(t, negative)))
+  }
+  return cuboid({ size: [0, 0, 0] })
 }
 
-const screwConnect = 16
+const screwConnect = 12
 const screws = (orientation) => {
   return subtract(
     hull(
       body(length - screwConnect, screwConnect),
       positionScrews(screwPositive, orientation)),
-    positionScrews(screwNegative, orientation))
+    union(
+      positionScrews(screwNegative, orientation),
+      negativeScrews(orientation)))
 }
 
 const longLeg = (orientation) => {
-  return union(foot, body(8, length - 20), screws(orientation))
+  return union(foot, body(8, length - 20), screws(orientation));
 }
 
 const main = () => {

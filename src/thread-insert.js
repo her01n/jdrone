@@ -31,7 +31,7 @@ const threadInsertNegative = ({ outerDiameter = 5, insertLength = 4, screwDiamet
     cylinder({ radius: screw/2, height: screwLength, center: [0, 0, screwLength/2] }))
 }
 
-const threadInsertPrintNegative = ({ outerDiameter = 5, insertLength = 4, screwDiameter = 3, screwLength = 16 } = {}) => {
+const threadInsertPrintNegative = ({ outerDiameter = 5, insertLength = 4, screwDiameter = 3, screwLength = 16, openLength = 16 } = {}) => {
   const diameter = outerDiameter - 0.3
   const h = insertLength + 0.1
   const screw = screwDiameter + 0.2
@@ -41,7 +41,7 @@ const threadInsertPrintNegative = ({ outerDiameter = 5, insertLength = 4, screwD
       printCylinderCut(diameter/2 + lead/2, 0.001),
       printCylinderCut(diameter/2, lead)),
     printCylinderCut(screw/2, screwLength),
-    translateY(-16, printCylinderCut(diameter/2 + lead/2, 16)))
+    translateY(-openLength, printCylinderCut(diameter/2 + lead/2, openLength)))
 }
 
 const main = () => {

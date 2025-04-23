@@ -1,5 +1,5 @@
 const { intersect, subtract, union } = require('@jscad/modeling').booleans
-const { hull } = require('@jscad/modeling').hulls
+const { hull, hullChain } = require('@jscad/modeling').hulls
 const { cuboid, cylinder, sphere } = require('@jscad/modeling').primitives
 const { mirrorX, mirrorY, mirrorZ, rotate, rotateZ, translate, translateX, translateY, translateZ } = require('@jscad/modeling').transforms
 
@@ -13,52 +13,46 @@ const batteryPitch = 30
 const batteryWidth = 5
 const batteryWall = 2.4
 
-const batteryPositive = fourWayRotate(
-  cuboid({
-    size: [batteryLength + batteryWall*2, batteryPitch + 2*batteryWidth + 2*batteryWall, thickness],
-    center: [0, 0, thickness/2] }))
+const batteryPositive = cuboid({
+  size: [batteryPitch + batteryWidth*2 + batteryWall*2, batteryPitch + batteryWidth*2 + batteryWall*2, thickness],
+  center: [0, 0, thickness/2] })
 const batteryNegative = fourWayRotate(
-  cuboid({
-    size: [batteryWidth, batteryLength, 8], center: [batteryPitch/2 + batteryWidth/2, 0, 4] }))
+  cuboid({ size: [batteryWidth, batteryLength, thickness], center: [batteryPitch/2 + batteryWidth/2, 0, thickness/2] }))
 
 const arrowNegative = arrowCut(20, thickness)
 
-const wallWidth = 10
-const walls = (length, width) => {
-  return union(
-    cuboid({ size: [wallWidth, length, thickness], center: [(batteryLength + wallWidth)/2, 0, thickness/2] }),
-    cuboid({ size: [wallWidth, length, thickness], center: [-(batteryLength + wallWidth)/2, 0, thickness/2] }),
-    cuboid({ size: [width, wallWidth, thickness], center: [0, (batteryLength/2 + wallWidth)/2, thickness/2] }),
-    cuboid({ size: [width, wallWidth, thickness], center: [0, -(batteryLength/2 + wallWidth)/2, thickness/2] }))
-}
+const corner = [30, 30]
+const app = [20, 50]
 
-const cross = (length, width) => {
-  return intersect(
-    cuboid({ size: [width, length, thickness], center: [0, 0, thickness/2] }),
-    rotateZ(Math.PI/4,
-      union(
-        cuboid({ size: [wallWidth, length + width + wallWidth, thickness], center: [0, 0, thickness/2] }),
-        cuboid({ size: [length + width + wallWidth, wallWidth, thickness], center: [0, 0, thickness/2] }))))
-}
+const crossWidth = 10
 
-const plate = (length, width) => {
-  const sideBatteryNegativeHalf = cuboid({
-    center: [width/2 - 4 - batteryWidth/2, 0, 0],
-    size: [batteryWidth, batteryLength, 8] })
-  if (width - 8 < batteryPitch + 2*batteryWidth) {
-    sideBatteryNegative = union(sideBatteryNegativeHalf, mirrorX(sideBatteryNegativeHalf))
-  } else {
-    sideBatteryNegative = cuboid({ size: [0, 0, 0] })
-  }
+const H = union(
+  cuboid({ size: [crossWidth, 99, thickness], center: [10, 0, thickness/2] }),
+  cuboid({ size: [crossWidth, 99, thickness], center: [-10, 0, thickness/2] }))
+const X = rotateZ(Math.PI/4,
+  cuboid({ size: [crossWidth, 99, thickness], center: [0, 0, thickness/2] }))
+const cross = intersect(
+  hull(
+    fourWayMirror(
+      union([corner, app].map((t) => translate(t, cylinder({ radius: 0.001, height: 99 })))))),
+  union(fourWayRotate(union(H, X))))
 
+const plate = ({ frameWidth = 8, frameHeight = 4} = {}) => {
+  const frame = hullChain(
+    [[corner[0], corner[1]], [corner[0], -corner[1]], [app[0], -app[1]], [-app[0], -app[1]],
+     [-corner[0], -corner[1]], [-corner[0], corner[1]], [-app[0], app[1]], [app[0], app[1]],
+     [corner[0], corner[1]], [-corner[0], corner[1]], [-corner[0], -corner[1]], [corner[0], -corner[1]]]
+       .map((t) =>
+         translate(t,
+           cylinder({ radius: frameWidth/2, height: frameHeight, center: [0, 0, frameHeight/2] }))))
   return subtract(
-    union(batteryPositive, walls(length, width), cross(length, width)),
-    union(batteryNegative, sideBatteryNegative, arrowNegative))
+    union(frame, cross, batteryPositive),
+    union(arrowNegative, batteryNegative))
 }
 
 const main = () => {
-  return plate(80, 60)
+  return plate
 }
 
-module.exports = { batteryLength, batteryWidth, plate, main }
+module.exports = { corner, app, plate, main }
 

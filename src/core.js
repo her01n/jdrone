@@ -1,11 +1,11 @@
-const { subtract, union } = require('@jscad/modeling').booleans
-const { hull } = require('@jscad/modeling').hulls
+const { intersect, subtract, union } = require('@jscad/modeling').booleans
+const { hull, hullChain } = require('@jscad/modeling').hulls
 const { cuboid, cylinder, sphere } = require('@jscad/modeling').primitives
 const { mirrorX, mirrorY, mirrorZ, rotate, rotateZ, translate, translateX, translateY, translateZ } = require('@jscad/modeling').transforms
 
 const { arrowCut } = require('./arrow')
 const { eyeletCornerPositive, eyeletCornerNegative } = require('./eyelet')
-const { batteryLength, batteryWidth, plate } = require('./plate')
+const { app, corner, plate } = require('./plate')
 const { printCylinder, printCylinderCut } = require('./print-cylinder')
 const { fourWayMirror, fourWayRotate } = require('./symmetries')
 const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
@@ -22,9 +22,9 @@ const armPositive = hull(
 
 const armNegative = union(
   translate([0, connectThreadInsertY, connectDiameter/2],
-    mirrorY(threadInsertPrintNegative())),
+    mirrorY(threadInsertPrintNegative({ openLength: 8 } ))),
   translate([0, connectThreadInsertY, connectDiameter/2 + connectDistance],
-    mirrorY(threadInsertPrintNegative())),
+    mirrorY(threadInsertPrintNegative({ openLength: 8 } ))),
   hull(
     translateZ(connectDiameter/2,
       mirrorY(printCylinder(connectDiameter/2 + 0.1, connectWidth))),
@@ -44,11 +44,11 @@ const pillarNegative = () => {
     translateZ(height, mirrorZ(threadInsertNegative())))
 }
 
-const length = 80
-const width = 40
+const length = 60
+const width = 60
 
 const pillarT = [width/2, length/2]
-const armT = [width/2 + 4 + 5, length/2]
+const armT = [width/2 + 10, length/2 + 5]
 
 const armAlpha =
   Math.PI/4 - Math.asin(Math.sqrt(2)*(armT[1] - armT[0])/2/Math.sqrt(2*2 + 100*100)) +
@@ -68,50 +68,50 @@ const diagonalTest = rotateZ(Math.PI/4, cuboid({ size: [400, 0.1, 0.1] }))
 const test = []
 // const test = union(armTest, diagonalTest)
 
-const lAngleSize = 8;
-const lAngleThickness = 4;
-const lAngle = (length) => {
-  return union(
-    cuboid({ size: [lAngleSize, length, lAngleThickness], center: [0, length/2, lAngleThickness/2] }),
-    cuboid({ size: [lAngleThickness, length, lAngleSize], center: [(lAngleSize - lAngleThickness) / 2, length/2, lAngleSize/2] }))
-}
-const lAngleRect = (length, width) => {
-  return fourWayMirror(
-    union(
-      translateX(width/2 - lAngleSize/2, lAngle(length/2 - lAngleSize/2)),
-      translateY(length/2 - lAngleSize/2, rotateZ(Math.PI/2, lAngle(width/2 - lAngleSize/2)))))
-}
-const frame = lAngleRect(length + 8, width + 8)
+const appPositive = fourWayMirror(
+  translate(app, cylinder({ radius: 3.2/2 + 1.4, height: height, center: [0, 0, height/2] })))
+const appNegative = fourWayMirror(
+  translate(app,
+    threadInsertNegative(),
+    cylinder({ radius: 3.2/2, height: height, center: [0, 0, height/2] })))
 
-const bottom = plate(length, width)
+const frame = union(
+  plate(),
+  fourWayMirror(cuboid({ size: [4, corner[1]*2, 8], center: [corner[0] + 2, 0, 4] })))
 
 const eyeletsY = length/2 - 6
 const eyeletsPositive = fourWayMirror(
-  translate([width/2, eyeletsY, 8],
-    rotateZ(-Math.PI/2,
-      eyeletCornerPositive(4, 2))))
+  translate([width/2, eyeletsY, 0],
+    translateZ(8,
+      rotateZ(-Math.PI/2,
+        eyeletCornerPositive(4, 2))),
+    cuboid({ size: [4, 11, 8], center: [2, -2, 4] })))
 const eyeletsNegative = fourWayMirror(
   translate([width/2, eyeletsY, 8],
     rotateZ(-Math.PI/2,
       eyeletCornerNegative(4))))
 
 const threadInsertsTs = [
-  [30.5/2, 30.5/2], [width/2, length/2 - 10], [width/2 - 10, length/2], [20, 20], [10, 30]];
+  [30.5/2, 30.5/2], [20, 20], [30, 10], [width/2, length/2 - 10], [width/2 - 10, length/2]];
 const threadInsertsPositive = fourWayMirror(
   union(threadInsertsTs.map((t) => { return translate(t, threadInsertPositive()) })))
 const threadInsertsNegative = fourWayMirror(
   union(threadInsertsTs.map((t) => { return translate(t, threadInsertNegative({ screwLength: 6 })) })))
 
-const smallStackThreadInsert = {
-  screwDiameter: 2, insertLength: 4, outerDiameter: 3.2, constrainHeight: 4 }
-const smallStackPositive =
-  fourWayMirror(translate([10, 10], threadInsertPositive(smallStackThreadInsert)))
-const smallStackNegative =
-  fourWayMirror(translate([10, 10], threadInsertNegative(smallStackThreadInsert)))
+const stack20Params = { screwDiameter: 2, insertLength: 4, outerDiameter: 3.2, constrainHeight: 4 }
+const stack20Positive = fourWayMirror(translate([10, 10], threadInsertPositive(stack20Params)))
+const stack20Negative = fourWayMirror(translate([10, 10], threadInsertNegative(stack20Params)))
+
+const screw3Positive = union(
+  cylinder({ radius: 5.9/2, height: 7, center: [0, 0, 3.5] }),
+  cylinder({ radius: 7.2/2, height: 5, center: [0, 0, 2.5] }))
+const screw3Negative = threadInsertNegative({ insertLength: 5 })
+const port20Positive = [30, 50].map((y) => fourWayMirror(translate([10, y], screw3Positive)))
+const port20Negative = [30, 50].map((y) => fourWayMirror(translate([10, y], screw3Negative)))
 
 const core = subtract(
-  union(cornersPositive, frame, eyeletsPositive, bottom, threadInsertsPositive, smallStackPositive, test),
-  union(cornersNegative, eyeletsNegative, threadInsertsNegative, smallStackNegative))
+  union(cornersPositive, appPositive, eyeletsPositive, frame, threadInsertsPositive, stack20Positive, port20Positive, test),
+  union(cornersNegative, appNegative, eyeletsNegative, threadInsertsNegative, stack20Negative, port20Negative))
 
 const main = () => {
   return core

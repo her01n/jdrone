@@ -24,3 +24,6 @@ preview.png: stl/preview.stl
 	f3d $< --output $@ --axis=false --grid=false --hdri-ambient \
 	  --ambient-occlusion --anti-aliasing --tone-mapping --filename=false
 
+watch:
+	ls src/* | entr -c make
+

@@ -1,5 +1,6 @@
 # TODO
 
+- horns
 - update photo when i finish the new craft
 - rename long-leg-d to long-leg-diagonal
   and long-leg-c to long-leg-cross
@@ -9,13 +10,10 @@
   - printed parts
   - thread inserts and screws
   - electronic parts
+    - speedybee f405 stack, happymodel ep1 rx
   - propellers
 - use some kind of lint to check the code
   - unused imports - requires
-- add support for vtx
-  - [ ] make the core 60x60mm
-  - [ ] add screws that could be used to fit the radio and/or vtx to 4 sides.
-  - [ ] model vtx holder
 - add arrow to core visible also when control is mounted
 - label motor rotations
 - label motor numbers
