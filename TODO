@@ -1,9 +1,8 @@
 # TODO
 
-- horns
 - update photo when i finish the new craft
 - rename long-leg-d to long-leg-diagonal
-  and long-leg-c to long-leg-cross
+  and long-leg-c to long-leg-lateral
 - use node build system instead of make
 - remove workaround for broken hull, the hull is fixed now
 - add bill of materials
@@ -17,4 +16,4 @@
 - add arrow to core visible also when control is mounted
 - label motor rotations
 - label motor numbers
-- add thread inserts around the frame, each 10mm?
+- more thread inserts?

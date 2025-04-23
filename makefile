@@ -1,5 +1,6 @@
-default: stl/arm.stl stl/core.stl stl/gopro.stl stl/gopro-pad.stl stl/long-leg-c.stl \
-    stl/long-leg-d.stl stl/preview.stl stl/rx.stl stl/top.stl preview.png
+default: stl/arm.stl stl/core.stl stl/gopro.stl stl/gopro-pad.stl stl/horns.stl \
+    stl/long-leg-c.stl stl/long-leg-d.stl stl/rx.stl stl/top.stl \
+    stl/preview.stl preview.png
 
 clean:
 	rm -rf stl/*
@@ -9,6 +10,7 @@ stl/core.stl: src/core.js src/arrow.js src/eyelet.js src/plate.js \
     src/print-cylinder.js src/symmetries.js src/thread-insert.js
 stl/gopro.stl: src/gopro.js
 stl/gopro-pad.stl: src/gopro-pad.js
+stl/horns.stl: src/horns.js src/top.js src/arrow.js src/hulls.js src/plate.js
 stl/long-leg-c.stl: src/long-leg-c.js src/long-leg.js
 stl/long-leg-d.stl: src/long-leg-d.js src/long-leg.js
 stl/preview.stl: src/preview.js src/arm.js src/arrow.js src/core.js src/eyelet.js \
@@ -26,4 +28,3 @@ preview.png: stl/preview.stl
 
 watch:
 	ls src/* | entr -c make
-
