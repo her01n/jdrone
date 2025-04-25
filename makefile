@@ -1,5 +1,5 @@
 default: stl/arm.stl stl/core.stl stl/gopro.stl stl/gopro-pad.stl stl/horns.stl \
-    stl/long-leg-c.stl stl/long-leg-d.stl stl/rx.stl stl/top.stl \
+    stl/long-leg-c.stl stl/long-leg-d.stl stl/pi-camera.stl stl/rx.stl stl/top.stl \
     stl/preview.stl preview.png
 
 clean:
