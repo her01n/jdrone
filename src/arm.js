@@ -16,6 +16,7 @@ const cone = (r1, r2, h) => {
 }
 
 const connectDiameter = 10
+const connectClearance = 6.2 // connectThickness from core + 0.2
 const connectDistance = 15
 const connectWidth = 4
 
@@ -35,8 +36,8 @@ const centerNegative =
     translateY(-connectWidth/2,
       union(
         screws(translateY(-50, printCylinderCut(3.2 / 2, 100))),
-        hull(screws(translateY(-50, printCylinder(connectDiameter/2 + 0.1, 50)))),
-        hull(screws(translateY(connectWidth, printCylinder(connectDiameter/2 + 0.1, 50)))))))
+        hull(screws(translateY(-50, printCylinder(connectClearance, 50)))),
+        hull(screws(translateY(connectWidth, printCylinder(connectClearance, 50)))))))
  
 const link = (startWidth, startHeight, endWidth, endHeight, length) => {
   const startArea = startWidth*startHeight

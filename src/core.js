@@ -10,15 +10,19 @@ const { printCylinder, printCylinderCut } = require('./print-cylinder')
 const { fourWayMirror, fourWayRotate } = require('./symmetries')
 const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
 
+const height = 25
+
 connectDiameter = 10
 connectDistance = 15
 connectWidth = 4
 connectThickness = 6
 connectThreadInsertY = 5.4
 
-const armPositive = hull(
-  translateZ(connectDiameter/2, printCylinder(connectDiameter / 2, connectThickness)),
-  translateZ(connectDiameter/2 + connectDistance, printCylinderCut(connectDiameter / 2, connectThickness)))
+const armPositive = intersect(
+  cuboid({ size: [99, 99, height], center: [0, 0, height/2] }),
+  hull(
+    translateZ(connectDiameter/2, printCylinder(connectThickness, connectThickness)),
+    translateZ(connectDiameter/2 + connectDistance, printCylinderCut(connectThickness, connectThickness))))
 
 const armNegative = union(
   translate([0, connectThreadInsertY, connectDiameter/2],
@@ -31,7 +35,6 @@ const armNegative = union(
     translateZ(connectDiameter/2 + connectDistance,
       mirrorY(printCylinderCut(connectDiameter/2 + 0.1, connectWidth)))))
 
-const height = 25
 
 const pillarPositive = () => {
   return cylinder({ radius: 4, height: height, center: [0, 0, height/2]})
