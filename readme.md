@@ -78,6 +78,18 @@ Additional parts needed:
 Print *gopro* model with ABS.
 Optionally print *gopro-pad* with flexible material, like TPU.
 
+## Usb
+
+Model *usb* contains two parts that could be used to fix a usb-a socket.
+It can be used to hold a wifi usb adapter for digital fpv.
+The usb can be fixed to *core*, *top* or *horns* part.
+
+Additional parts needed:
+
+- 4x M3x5x4 thread inserts
+  Two inserts in *usb* part and two in *core*, *top* or *horns*.
+- 4x M3x8 screws
+
 ## Compile
 
 Install *node*, *make* and *@jscad/cli* package, example for arch:

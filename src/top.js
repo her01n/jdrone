@@ -7,6 +7,7 @@ const { arrowCut } = require('./arrow')
 const { hullRing } = require('./hulls')
 const { app, corner, plate } = require('./plate')
 const { xx, yy, fourWayMirror } = require('./symmetries')
+const { threadInsertPositive, threadInsertNegative } = require('./thread-insert')
 
 const frameThickness = 2.4
 const screwPositive = cylinder({ radius: 4, height: frameThickness, center: [0, 0, frameThickness/2] })
@@ -18,32 +19,16 @@ const screwsPositive =
 const screwsNegative = 
   union([app, corner].map((t) => fourWayMirror(translate(t, screwNegative))))
 
-const bottom = plate({ frameHeight: frameThickness })
-
-const stripLength = 22
-const stripWall = 2.4
-
-const stripY = stripLength/2 + stripWall;
-
-const stripPositive = xx(union(
-  cuboid({
-    size: [5, 2*stripY, stripWall],
-    center: [corner[0] + 4 + 5/2, 0, stripWall/2] }),
-  yy(cylinder({ radius: 5/2, height: stripWall, center: [corner[0] + 4 + 5/2, stripY, stripWall/2] })),
-  subtract(
-    cuboid({
-      size: [5/2, stripLength + 2*stripWall + 2*5, stripWall],
-      center: [corner[0] + 4 + 5/4, 0, stripWall/2] }),
-    yy(cylinder({ radius: 5/2, height: stripWall, center: [corner[0] + 4 + 5/2, stripY + 5, stripWall/2] })))))
-
-const stripNegative = xx(cuboid({
-  size: [5, stripLength, stripWall],
-  center: [corner[0] + 4 - 2.4 + 5/2, 0, stripWall/2] }))
+const threadInsertTs = [[corner[1], 20], [corner[1], 10]]
+const threadInsertsPositive = fourWayMirror(
+  threadInsertTs.map((t) => translate(t, threadInsertPositive({ constrainHeight: 4 }))))
+const threadInsertsNegative = fourWayMirror(
+  threadInsertTs.map((t) => translate(t, threadInsertNegative())))
 
 const top =
   subtract(
-    union(bottom, screwsPositive, stripPositive),
-    union(screwsNegative, stripNegative))
+    union(plate(), screwsPositive, threadInsertsPositive),
+    union(screwsNegative, threadInsertsNegative))
 
 const main = () => {
   return top
