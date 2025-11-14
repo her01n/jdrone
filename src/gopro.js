@@ -4,7 +4,7 @@ const { cuboid, cylinder, sphere } = require('@jscad/modeling').primitives
 const { mirrorX, mirrorY, mirrorZ, rotate, rotateY, rotateZ, translate, translateX, translateY, translateZ } = require('@jscad/modeling').transforms
 
 const { printCylinder, printCylinderCut } = require('./print-cylinder')
-const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
+const { threadInsertPrintPositive, threadInsertPrintNegative } = require('./thread-insert')
 
 const finHeight = 15
 const centerFinWidth = 3
@@ -14,9 +14,10 @@ const slack = 0.1
 const z = 9
 const screwRadius = 5.2 / 2
 const connectHeight = 7
-const threadInsertOuterDiameter = 12
-const threadInsertPosition = 1 + 8 + centerFinWidth/2 + finDistance
 const screwThickness = 2
+const threadInsertX = centerFinWidth/2 + finDistance
+const threadInsertRadius = 6
+const threadInsertLength = 7
 
 const finsWidth = centerFinWidth + 2*finDistance + 2*sideFinWidth
 
@@ -28,7 +29,7 @@ const goproPositive = hull(
   translateZ(z,
     rotateY(Math.PI/2,
       cylinder({ radius: finHeight/2, height: finsWidth }),
-      cylinder({ radius: threadInsertOuterDiameter/2, height: 2, center: [0, 0, -threadInsertPosition + 1] }))),
+      cylinder({ radius: threadInsertRadius, height: threadInsertLength, center: [0, 0, -threadInsertX - threadInsertLength/2] }))),
   goproConnect)
 
 const cut = finHeight * (1 - Math.cos(Math.PI/4))
@@ -48,9 +49,9 @@ const finCut =
 const goproNegative = translateZ(z,
   rotateZ(Math.PI/2, translateY(-100, printCylinderCut(screwRadius, 200))),
   finCut, mirrorX(finCut),
-  translateX(-threadInsertPosition,
+  translateX(-threadInsertX,
     rotateZ(-Math.PI/2,
-      threadInsertPrintNegative({ outerDiameter: 8, insertLength: 7, screwDiameter: 5 }))),
+      threadInsertPrintNegative({ outerDiameter: 8, insertLength: threadInsertLength, screwDiameter: 5 }))),
   rotateY(Math.PI/2,
     cylinder({
       radius: 6,
