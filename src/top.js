@@ -5,34 +5,28 @@ const { mirrorX, mirrorY, mirrorZ, rotate, rotateZ, translate, translateX, trans
 
 const { arrowCut } = require('./arrow')
 const { hullRing } = require('./hulls')
-const { app, corner, plate } = require('./plate')
 const { xx, yy, fourWayMirror } = require('./symmetries')
+const { frame, frameThreadPositive, frameThreadNegative, length, width } = require('./frame')
 const { threadInsertPositive, threadInsertNegative } = require('./thread-insert')
 
-const frameThickness = 2.4
-const screwPositive = cylinder({ radius: 4, height: frameThickness, center: [0, 0, frameThickness/2] })
-const screwConnect = screwPositive
-const screwNegative = cylinder({ radius: 3.2 / 2, height: 20 })
+const topThickness = 2.4
 
-const screwsPositive = 
-  union([app, corner].map((t) => fourWayMirror(translate(t, screwPositive))))
-const screwsNegative = 
-  union([app, corner].map((t) => fourWayMirror(translate(t, screwNegative))))
+const framePositive = frame({ thickness: topThickness })
 
-const threadInsertTs = [[corner[1], 20], [corner[1], 10]]
-const threadInsertsPositive = fourWayMirror(
-  threadInsertTs.map((t) => translate(t, threadInsertPositive({ constrainHeight: 4 }))))
-const threadInsertsNegative = fourWayMirror(
-  threadInsertTs.map((t) => translate(t, threadInsertNegative())))
+const frameThreadTs = [[width/2, 10], [width/2, 20]]
+const frameThreadsPositive = xx(yy(frameThreadTs.map((t) => translate(t, frameThreadPositive))))
+const frameThreadsNegative = xx(yy(frameThreadTs.map((t) => translate(t, frameThreadNegative))))
 
-const top =
-  subtract(
-    union(plate(), screwsPositive, threadInsertsPositive),
-    union(screwsNegative, threadInsertsNegative))
+const screwsNegative = xx(yy(translate([width/2, length/2], cylinder({ radius: 3.4/2, height: 99 }))))
+
+const topPositive = union(framePositive, frameThreadsPositive)
+const topNegative = union(frameThreadsNegative, screwsNegative)
+
+const top = subtract(topPositive, topNegative)
 
 const main = () => {
   return top
 }
 
-module.exports = { main, screwConnect, top }
+module.exports = { main, top, topPositive, topNegative, topThickness }
 

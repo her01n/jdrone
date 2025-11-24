@@ -5,10 +5,25 @@ const { mirrorX, mirrorY, mirrorZ, rotate, rotateZ, translate, translateX, trans
 
 const { arrowCut } = require('./arrow')
 const { eyeletCornerPositive, eyeletCornerNegative } = require('./eyelet')
-const { app, corner, plate } = require('./plate')
 const { printCylinder, printCylinderCut } = require('./print-cylinder')
-const { fourWayMirror, fourWayRotate } = require('./symmetries')
+const { fourWayMirror, fourWayRotate, xx, yy } = require('./symmetries')
 const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
+const { frame, frameThreadPositive, frameThreadNegative, length, width } = require('./frame')
+
+const threadTs = [[30.5/2, 30.5/2],
+    [10, 20], [10, 40],
+    [20, 10], [20, 20], [20, 30], [20, 40],
+    [30, 10], [30, 20], [30, 30]]
+
+const frameThreadsPositive = yy(xx(threadTs.map((t) => translate(t, frameThreadPositive))))
+const frameThreadsNegative = yy(xx(threadTs.map((t) => translate(t, frameThreadNegative))))
+
+const stack20Params = { screwDiameter: 2, insertLength: 4, outerDiameter: 3.2, height: 4 }
+const stack20Positive = threadInsertPositive(stack20Params)
+const stack20Negative = translateZ(4, mirrorZ(threadInsertNegative(stack20Params)))
+const stack20Ts = [[10, 10], [10, 30]]
+const stack20sPositive = xx(yy(stack20Ts.map((t) => translate(t, stack20Positive))))
+const stack20sNegative = xx(yy(stack20Ts.map((t) => translate(t, stack20Negative))))
 
 const height = 25
 
@@ -16,13 +31,14 @@ connectDiameter = 10
 connectDistance = 15
 connectWidth = 4
 connectThickness = 6
+connectLength = 7
 connectThreadInsertY = 5.4
 
 const armPositive = intersect(
   cuboid({ size: [99, 99, height], center: [0, 0, height/2] }),
   hull(
-    translateZ(connectDiameter/2, printCylinder(connectThickness, connectThickness)),
-    translateZ(connectDiameter/2 + connectDistance, printCylinderCut(connectThickness, connectThickness))))
+    translateZ(connectDiameter/2, printCylinder(connectThickness, connectLength)),
+    translateZ(connectDiameter/2 + connectDistance, printCylinderCut(connectThickness, connectLength))))
 
 const armNegative = union(
   translate([0, connectThreadInsertY, connectDiameter/2],
@@ -35,7 +51,6 @@ const armNegative = union(
     translateZ(connectDiameter/2 + connectDistance,
       mirrorY(printCylinderCut(connectDiameter/2 + 0.1, connectWidth)))))
 
-
 const pillarPositive = () => {
   return cylinder({ radius: 4, height: height, center: [0, 0, height/2]})
 }
@@ -46,9 +61,6 @@ const pillarNegative = () => {
     threadInsertNegative(),
     translateZ(height, mirrorZ(threadInsertNegative())))
 }
-
-const length = 60
-const width = 60
 
 const pillarT = [width/2, length/2]
 const armT = [width/2 + 10, length/2 + 5]
@@ -71,54 +83,14 @@ const diagonalTest = rotateZ(Math.PI/4, cuboid({ size: [400, 0.1, 0.1] }))
 const test = []
 // const test = union(armTest, diagonalTest)
 
-const appPositive = fourWayMirror(
-  translate(app, cylinder({ radius: 3.2/2 + 1.4, height: height, center: [0, 0, height/2] })))
-const appNegative = fourWayMirror(
-  translate(app,
-    threadInsertNegative(),
-    cylinder({ radius: 3.2/2, height: height, center: [0, 0, height/2] })))
-
-const frame = union(
-  plate(),
-  fourWayMirror(cuboid({ size: [4, corner[1]*2, 8], center: [corner[0] + 2, 0, 4] })))
-
-const eyeletsY = length/2 - 6
-const eyeletsPositive = fourWayMirror(
-  translate([width/2, eyeletsY, 0],
-    translateZ(8,
-      rotateZ(-Math.PI/2,
-        eyeletCornerPositive(4, 2))),
-    cuboid({ size: [4, 11, 8], center: [2, -2, 4] })))
-const eyeletsNegative = fourWayMirror(
-  translate([width/2, eyeletsY, 8],
-    rotateZ(-Math.PI/2,
-      eyeletCornerNegative(4))))
-
-const threadInsertsTs = [
-  [30.5/2, 30.5/2], [20, 20], [30, 10], [width/2, length/2 - 10], [width/2 - 10, length/2]];
-const threadInsertsPositive = fourWayMirror(
-  union(threadInsertsTs.map((t) => { return translate(t, threadInsertPositive()) })))
-const threadInsertsNegative = fourWayMirror(
-  union(threadInsertsTs.map((t) => { return translate(t, threadInsertNegative({ screwLength: 6 })) })))
-
-const stack20Params = { screwDiameter: 2, insertLength: 4, outerDiameter: 3.2, constrainHeight: 4 }
-const stack20Positive = fourWayMirror(translate([10, 10], threadInsertPositive(stack20Params)))
-const stack20Negative = fourWayMirror(translate([10, 10], threadInsertNegative(stack20Params)))
-
-const screw3Positive = union(
-  cylinder({ radius: 5.9/2, height: 7, center: [0, 0, 3.5] }),
-  cylinder({ radius: 7.2/2, height: 5, center: [0, 0, 2.5] }))
-const screw3Negative = threadInsertNegative({ insertLength: 5 })
-const port20Positive = [30, 50].map((y) => fourWayMirror(translate([10, y], screw3Positive)))
-const port20Negative = [30, 50].map((y) => fourWayMirror(translate([10, y], screw3Negative)))
 
 const core = subtract(
-  union(cornersPositive, appPositive, eyeletsPositive, frame, threadInsertsPositive, stack20Positive, port20Positive, test),
-  union(cornersNegative, appNegative, eyeletsNegative, threadInsertsNegative, stack20Negative, port20Negative))
+  union(frame(), cornersPositive, frameThreadsPositive, stack20sPositive),
+  union(cornersNegative, frameThreadsNegative, stack20sNegative))
 
 const main = () => {
   return core
 }
 
-module.exports = { armT, armAlpha, core, width, length, height, main }
+module.exports = { armAlpha, armT, height, core, main }
 

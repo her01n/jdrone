@@ -5,6 +5,7 @@ const { fourWayMirror } = require('./symmetries')
 
 arm = require('./arm')
 core = require('./core')
+const { length, width } = require('./frame')
 longLeg = require('./long-leg')
 longLegD = require('./long-leg-d')
 rx = require('./rx')
@@ -18,17 +19,17 @@ const leg = translate([0, legT, -longLeg.height - d],
   rotateX(Math.PI/2 + longLeg.angle, longLegD.longLegD))
   
 const topAngle = Math.PI/6;
-const topZ = core.height + d + core.width/2*Math.sin(topAngle)
+const topZ = core.height + d + width/2*Math.sin(topAngle)
 
 preview = union(
   core.core,
   fourWayMirror(
     translate(core.armT, rotateZ(core.armAlpha - Math.PI/2, translateX(d, arm.arm)))),
-  translate([core.width/2, core.length/2], rotateZ(-Math.PI/4, leg)),
-  translate([-core.width/2, core.length/2], rotateZ(Math.PI/4, leg)),
-  translate([core.width/2, -core.length/2], rotateZ(-3*Math.PI/4, leg)),
-  translate([-core.width/2, -core.length/2], rotateZ(3*Math.PI/4, leg)),
-  translate([0, 30, 4.1 + d], rotateZ(Math.PI, rx.rx)),
+  translate([width/2, length/2], rotateZ(-Math.PI/4, leg)),
+  translate([-width/2, length/2], rotateZ(Math.PI/4, leg)),
+  translate([width/2, -length/2], rotateZ(-3*Math.PI/4, leg)),
+  translate([-width/2, -length/2], rotateZ(3*Math.PI/4, leg)),
+  translate([0, length/2, 4 + d], rx.rx),
   translate([0, 0, topZ], rotateY(-topAngle, top.top)))
 
 const main = () => {
