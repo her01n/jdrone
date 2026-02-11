@@ -2,6 +2,8 @@
 
 - rename long-leg-d to long-leg-diagonal
   and long-leg-c to long-leg-lateral
+- add digital fpv
+  hold camera, raspberry pi zero, usb wifi/wifi module
 - use node build system instead of make
 - remove workaround for broken hull, the hull is fixed now
 - add bill of materials
@@ -15,4 +17,4 @@
 - add arrow to core visible also when control is mounted
 - label motor rotations
 - label motor numbers
-- more thread inserts?
+

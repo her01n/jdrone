@@ -8,7 +8,7 @@ core = require('./core')
 const { length, width } = require('./frame')
 longLeg = require('./long-leg')
 longLegD = require('./long-leg-d')
-rx = require('./rx')
+bind = require('./bind')
 top = require('./top')
 
 const d = 8
@@ -29,7 +29,7 @@ preview = union(
   translate([-width/2, length/2], rotateZ(Math.PI/4, leg)),
   translate([width/2, -length/2], rotateZ(-3*Math.PI/4, leg)),
   translate([-width/2, -length/2], rotateZ(3*Math.PI/4, leg)),
-  translate([0, length/2, 4 + d], rx.rx),
+  translate([0, length/2, 4 + d], rotateX(Math.PI, bind.bind(20))),
   translate([0, 0, topZ], rotateY(-topAngle, top.top)))
 
 const main = () => {
