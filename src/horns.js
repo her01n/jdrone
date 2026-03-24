@@ -11,7 +11,7 @@ const e = 0.001
 const height = 20
 const baseThickness = 5.6
 const peakThickness = 1.8
-const distance = 105
+const distance = 95
 
 const hornPositive = hull(
   cuboid({ size: [20, baseThickness, baseThickness], center: [0, baseThickness/2, baseThickness/2] }),

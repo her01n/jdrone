@@ -14,7 +14,10 @@ const topThickness = 2.4
 const framePositive = frame({ thickness: topThickness })
 
 const frameThreadTs = [[width/2, 10], [width/2, 20]]
-const frameThreadsPositive = xx(yy(frameThreadTs.map((t) => translate(t, frameThreadPositive))))
+const frameThreadsPositive = xx(
+    union(
+      yy(frameThreadTs.map((t) => translate(t, frameThreadPositive))),
+      cuboid({ size: [4, 40, 4], center: [width/2, 0, 2] })));
 const frameThreadsNegative = xx(yy(frameThreadTs.map((t) => translate(t, frameThreadNegative))))
 
 const screwsNegative = xx(yy(translate([width/2, length/2], cylinder({ radius: 3.4/2, height: 99 }))))
