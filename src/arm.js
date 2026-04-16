@@ -3,9 +3,10 @@ const { hull, hullChain } = require('@jscad/modeling').hulls
 const { cuboid, cylinder, sphere } = require('@jscad/modeling').primitives
 const { mirrorZ, rotate, rotateZ, translate, translateY, translateZ } = require('@jscad/modeling').transforms
 
+const { connect, screws } = require('./connect')
 const { hullRing } = require('./hulls')
 const { printCylinder, printCylinderCut } = require('./print-cylinder')
-const { fourWayRotate } = require('./symmetries')
+const { fourWayRotate, yy } = require('./symmetries')
 
 const cone = (r1, r2, h) => {
   const e = 0.001
@@ -14,29 +15,12 @@ const cone = (r1, r2, h) => {
     cylinder({ radius: r2, height: e, center: [0, 0, h - e/2] }))
 }
 
-const connectDiameter = 10
-const connectClearance = 6.2 // connectThickness from core + 0.2
-const connectDistance = 15
-const connectWidth = 4
-
-const screws = (shape) => {
-  return [
-    translateZ(connectDiameter/2, shape),
-    translateZ(connectDiameter/2 + connectDistance, shape)]
-}   
-
-const centerPositive = 
-  rotateZ(Math.PI/2,
-    translateY(-connectWidth/2,
-      hull(screws(printCylinder(connectDiameter / 2, connectWidth)))))
+const centerPositive = rotateZ(Math.PI/2, translateY(-2, connect({ length: 4 })))
 
 const centerNegative = 
   rotateZ(Math.PI/2,
-    translateY(-connectWidth/2,
-      union(
-        screws(translateY(-50, printCylinderCut(3.2 / 2, 100))),
-        hull(screws(translateY(-50, printCylinder(connectClearance, 50)))),
-        hull(screws(translateY(connectWidth, printCylinder(connectClearance, 50)))))))
+    screws(translateY(-50, printCylinderCut(3.2 / 2, 100))),
+    yy(translateY(-10 - 2, connect({ length: 10, slack: 0.2 }))))
  
 const link = (startWidth, startHeight, endWidth, endHeight, length) => {
   const startArea = (startWidth + endWidth) / 2 * startHeight
@@ -90,7 +74,7 @@ const holeTs = [[0, 30], [0, 60]]
 const arm = subtract(
   union(
     centerPositive,
-    link(connectWidth, connectDiameter + connectDistance, 8, 5, linkLength),
+    link(4, 25, 8, 5, linkLength),
     translateY(100, motor)),
   union(
     centerNegative,

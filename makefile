@@ -6,11 +6,11 @@ default: stl/arm.stl stl/bind20.stl stl/bind40.stl stl/core.stl stl/gopro.stl \
 clean:
 	rm -rf stl/*
 
-stl/arm.stl: src/arm.js src/hulls.js src/print-cylinder.js src/symmetries.js
+stl/arm.stl: src/arm.js src/connect.js src/hulls.js src/print-cylinder.js src/symmetries.js
 stl/bind20.stl: src/bind20.js src/bind.js src/symmetries.js
 stl/bind40.stl: src/bind40.js src/bind.js src/symmetries.js
-stl/core.stl: src/core.js src/arrow.js src/plate.js \
-    src/print-cylinder.js src/symmetries.js src/thread-insert.js
+stl/core.stl: src/core.js src/arm.js src/arrow.js src/connect.js src/frame.js \
+    src/plate.js src/print-cylinder.js src/symmetries.js src/thread-insert.js
 stl/gopro.stl: src/gopro.js
 stl/gopro-pad.stl: src/gopro-pad.js
 stl/horns.stl: src/horns.js src/top.js src/arrow.js src/hulls.js src/plate.js

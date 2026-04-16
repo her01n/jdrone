@@ -4,6 +4,7 @@ const { cuboid, cylinder, sphere } = require('@jscad/modeling').primitives
 const { mirrorX, mirrorY, mirrorZ, rotate, rotateZ, translate, translateX, translateY, translateZ } = require('@jscad/modeling').transforms
 
 const { arrowCut } = require('./arrow')
+const { connect, screws } = require('./connect')
 const { printCylinder, printCylinderCut } = require('./print-cylinder')
 const { fourWayMirror, fourWayRotate, xx, yy } = require('./symmetries')
 const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
@@ -33,26 +34,17 @@ connectThickness = 6
 connectLength = 7
 connectThreadInsertY = 5.4
 
-const armPositive = intersect(
-  cuboid({ size: [99, 99, height], center: [0, 0, height/2] }),
-  hull(
-    translateZ(connectDiameter/2, printCylinder(connectThickness, connectLength)),
-    translateZ(connectDiameter/2 + connectDistance, printCylinderCut(connectThickness, connectLength))))
+const armPositive = connect({ length: 5 })
 
 const armNegative = union(
-  translate([0, connectThreadInsertY, connectDiameter/2],
-    mirrorY(threadInsertPrintNegative({ openLength: 8 } ))),
-  translate([0, connectThreadInsertY, connectDiameter/2 + connectDistance],
-    mirrorY(threadInsertPrintNegative({ openLength: 8 } ))),
-  hull(
-    translateZ(connectDiameter/2,
-      mirrorY(printCylinder(connectDiameter/2 + 0.1, connectWidth))),
-    translateZ(connectDiameter/2 + connectDistance,
-      mirrorY(printCylinderCut(connectDiameter/2 + 0.1, connectWidth)))))
+  screws(translateY(4 + 1, mirrorY(threadInsertPrintNegative({ openLength: 8 })))),
+  mirrorY(connect({ lenght: 10, slack: 0.2 })))
+  
+const pillarConnect = cylinder({ radius: 4, height: height, center: [0, 0, height/2]})
 
-const pillarPositive = () => {
-  return cylinder({ radius: 4, height: height, center: [0, 0, height/2]})
-}
+const pillarPositive = hull(
+  cylinder({ radius: 6, height: 4, center: [0, 0, 2] }),
+  cylinder({ radius: 4, height: 8, center: [0, 0, 4] }))
 
 const pillarNegative = () => {
   return union(
@@ -68,10 +60,11 @@ const armAlpha =
   Math.PI/4 - Math.asin(Math.sqrt(2)*(armT[1] - armT[0])/2/Math.sqrt(2*2 + 100*100)) +
   Math.atan2(2, 100)
 
-const cornersPositive = fourWayMirror(
+const cornersPositive = fourWayMirror(union(
   hull(
-    translate(pillarT, pillarPositive()),
-    translate(armT, rotateZ(armAlpha, armPositive))))
+    translate(pillarT, pillarConnect),
+    translate(armT, rotateZ(armAlpha, armPositive))),
+  translate(pillarT, pillarPositive)))
 const cornersNegative = fourWayMirror(
   union(translate(pillarT, pillarNegative()), translate(armT, rotateZ(armAlpha, armNegative))))
 
@@ -81,7 +74,6 @@ const diagonalTest = rotateZ(Math.PI/4, cuboid({ size: [400, 0.1, 0.1] }))
 
 const test = []
 // const test = union(armTest, diagonalTest)
-
 
 const core = subtract(
   union(frame(), cornersPositive, frameThreadsPositive, stack20sPositive),

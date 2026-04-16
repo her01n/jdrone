@@ -9,7 +9,7 @@ const { fourWayMirror, fourWayRotate, xx, yy } = require('./symmetries')
 const { threadInsertNegative, threadInsertPositive, threadInsertPrintNegative } = require('./thread-insert')
 
 const frameThreadPositive = cylinder({ radius: (5 - 0.3) / 2 + 1.2, height: 4, center: [0, 0, 2] })
-const frameThreadNegative = cylinder({ radius: (5 - 0.3) / 2, height: 4, center: [0, 0, 2] })
+const frameThreadNegative = cylinder({ radius: (5 - 0.3) / 2, height: 9, center: [0, 0, 2] })
 
 const width = 60
 const length = 80
