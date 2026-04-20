@@ -48,7 +48,8 @@ const motor =
     hull(
       fourWayRotate(
         translate([radius, radius],
-          cylinder({ radius: 4, height: motorHeight, center: [0, 0, motorHeight/2] })))),
+          cylinder({ radius: 4.2, height: motorHeight, center: [0, 0, motorHeight/2] }))),
+      cuboid({ size: [8, 4.2, motorHeight], center: [0, -12, motorHeight/2] })),
     union(
       fourWayRotate(
         translate([radius, radius], cylinder({ radius: 3.2/2, height: 20 }))),
