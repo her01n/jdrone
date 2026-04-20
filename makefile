@@ -1,4 +1,4 @@
-default: stl/arm.stl stl/bind20.stl stl/bind40.stl stl/core.stl stl/gopro.stl \
+default: stl/arm.stl stl/belly.stl stl/bind20.stl stl/bind40.stl stl/core.stl stl/gopro.stl \
     stl/gopro-pad.stl stl/horns.stl stl/long-leg-c.stl stl/long-leg-d.stl \
     stl/magnetometer.stl stl/pi-camera.stl stl/top.stl stl/preview.stl \
     stl/strap.stl preview.png
@@ -7,6 +7,7 @@ clean:
 	rm -rf stl/*
 
 stl/arm.stl: src/arm.js src/connect.js src/hulls.js src/print-cylinder.js src/symmetries.js
+stl/belly.stl: src/belly.js src/horns.js src/symmetries.js
 stl/bind20.stl: src/bind20.js src/bind.js src/symmetries.js
 stl/bind40.stl: src/bind40.js src/bind.js src/symmetries.js
 stl/core.stl: src/core.js src/arm.js src/arrow.js src/connect.js src/frame.js \

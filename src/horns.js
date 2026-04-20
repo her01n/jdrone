@@ -41,5 +41,5 @@ const main = () => {
   return horns
 }
 
-module.exports = { horns, main }
+module.exports = { hornConnect, hornPositive, horns, main }
 
