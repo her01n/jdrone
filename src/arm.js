@@ -49,7 +49,7 @@ const motor =
       fourWayRotate(
         translate([radius, radius],
           cylinder({ radius: 4.2, height: motorHeight, center: [0, 0, motorHeight/2] }))),
-      cuboid({ size: [8, 4.2, motorHeight], center: [0, -12, motorHeight/2] })),
+      cuboid({ size: [8, 4.2, motorHeight], center: [0, -14, motorHeight/2] })),
     union(
       fourWayRotate(
         translate([radius, radius], cylinder({ radius: 3.2/2, height: 20 }))),
@@ -57,7 +57,7 @@ const motor =
       cone(motorCenterRadius + motorCenterCorner, motorCenterRadius, motorCenterCorner),
       translateZ(motorHeight - motorCenterCorner,
         cone(motorCenterRadius, motorCenterRadius + motorCenterCorner, motorCenterCorner))))
-const motorNegative = cylinder({ radius: 15, height: 30, center: [0, 0, motorHeight + 15] })
+const motorNegative = cylinder({ radius: 14, height: 30, center: [0, 0, motorHeight + 15] })
 
 const linkLength = 100 - radius - 4
 
