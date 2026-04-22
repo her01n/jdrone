@@ -41,7 +41,7 @@ const board = union(
   hull(yy(translate([boardX + 4 + 10, 10, 0], knot))));
   
 
-const gps = intersect(
+const gpsStem = intersect(
   rotateY(-Math.PI/2 - Math.sin((boardX + 4) / (boardZ - 4)),
     subtract(
       union(frameScrewsPositive, stem, board, boardScrewsPositive),
@@ -49,8 +49,8 @@ const gps = intersect(
   cuboid({ center: [0, 0, 50 - 4], size: [99, 99, 100] }));
 
 const main = () => {
-  return gps
+  return gpsStem
 }
 
-module.exports = { gps, main }
+module.exports = { gpsStem, main }
 

@@ -13,7 +13,7 @@ const topThickness = 2.4
 
 const framePositive = frame({ thickness: topThickness })
 
-const frameThreadTs = [[width/2, 10], [width/2, 20]]
+const frameThreadTs = [[width/2, 10], [width/2, 20], [20, 10], [20, 20]]
 const frameThreadsPositive = xx(
     union(
       yy(frameThreadTs.map((t) => translate(t, frameThreadPositive))),

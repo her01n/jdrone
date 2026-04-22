@@ -1,6 +1,6 @@
 default: stl/arm.stl stl/belly.stl stl/bind20.stl stl/bind40.stl stl/core.stl stl/gopro.stl \
-    stl/gopro-pad.stl stl/gps.stl stl/horns.stl stl/long-leg-c.stl stl/long-leg-d.stl \
-    stl/magnetometer.stl stl/pi-camera.stl stl/top.stl stl/preview.stl \
+    stl/gopro-pad.stl stl/gps-flat.stl stl/gps-stem.stl stl/horns.stl stl/long-leg-c.stl \
+    stl/long-leg-d.stl stl/magnetometer.stl stl/pi-camera.stl stl/top.stl stl/preview.stl \
     stl/strap.stl preview.png
 
 clean:
@@ -14,7 +14,8 @@ stl/core.stl: src/core.js src/arm.js src/arrow.js src/connect.js src/frame.js \
     src/plate.js src/print-cylinder.js src/symmetries.js src/thread-insert.js
 stl/gopro.stl: src/gopro.js
 stl/gopro-pad.stl: src/gopro-pad.js
-stl/gps.stl: src/gps.js src/symmetries.js
+stl/gps-stem.stl: src/gps-stem.js src/symmetries.js
+stl/gps-flat.stl: src/gps-flat.js src/symmetries.js
 stl/horns.stl: src/horns.js src/top.js src/arrow.js src/hulls.js src/plate.js
 stl/long-leg-c.stl: src/long-leg-c.js src/long-leg.js
 stl/long-leg-d.stl: src/long-leg-d.js src/long-leg.js
