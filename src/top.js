@@ -3,7 +3,7 @@ const { hull } = require('@jscad/modeling').hulls
 const { cuboid, cylinder, sphere } = require('@jscad/modeling').primitives
 const { mirrorX, mirrorY, mirrorZ, rotate, rotateZ, translate, translateX, translateY, translateZ } = require('@jscad/modeling').transforms
 
-const { arrowCut } = require('./arrow')
+const { arrow, arrowCut } = require('./arrow')
 const { hullRing } = require('./hulls')
 const { xx, yy, fourWayMirror } = require('./symmetries')
 const { frame, frameThreadPositive, frameThreadNegative, length, width } = require('./frame')
@@ -13,7 +13,7 @@ const topThickness = 2.4
 
 const framePositive = frame({ thickness: topThickness })
 
-const frameThreadTs = [[width/2, 10], [width/2, 20], [20, 10], [20, 20]]
+const frameThreadTs = [[width/2, 10], [width/2, 20]]
 const frameThreadsPositive = xx(
     union(
       yy(frameThreadTs.map((t) => translate(t, frameThreadPositive))),
@@ -22,14 +22,16 @@ const frameThreadsNegative = xx(yy(frameThreadTs.map((t) => translate(t, frameTh
 
 const screwsNegative = xx(yy(translate([width/2, length/2], cylinder({ radius: 3.4/2, height: 99 }))))
 
+const frontArrow = translate([0, length/2, topThickness], arrow(6))
+
 const topPositive = union(framePositive, frameThreadsPositive)
 const topNegative = union(frameThreadsNegative, screwsNegative)
 
-const top = subtract(topPositive, topNegative)
+const top = subtract(union(topPositive, frontArrow), topNegative)
 
 const main = () => {
   return top
 }
 
-module.exports = { main, top, topPositive, topNegative, topThickness }
+module.exports = { main, frontArrow, top, topPositive, topNegative, topThickness }
 
