@@ -24,7 +24,8 @@ const topZ = core.height + d + width/2*Math.sin(topAngle)
 preview = union(
   core.core,
   fourWayMirror(
-    translate(core.armT, rotateZ(core.armAlpha - Math.PI/2, translateX(d, arm.arm)))),
+    translate(core.armT,
+      rotateZ(core.armAlpha - Math.PI/2, translateX(d, rotateY(Math.PI, arm.arm))))),
   translate([width/2, length/2], rotateZ(-Math.PI/4, leg)),
   translate([-width/2, length/2], rotateZ(Math.PI/4, leg)),
   translate([width/2, -length/2], rotateZ(-3*Math.PI/4, leg)),
