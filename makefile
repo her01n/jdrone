@@ -1,4 +1,4 @@
-default: stl/antenna.stl stl/arm.stl stl/belly.stl stl/belly-camera-screw.stl \
+default: stl/antenna.stl stl/arm.stl stl/belly.stl stl/belly-camera-screw.stl stl/belly-gopro.stl \
     stl/bind20.stl stl/bind40.stl stl/core.stl stl/gopro.stl stl/gopro-pad.stl \
     stl/gps.stl stl/horns.stl stl/long-leg-c.stl stl/long-leg-d.stl stl/magnetometer.stl \
     stl/pi-camera.stl stl/top.stl stl/preview.stl stl/strap.stl stl/top-gps.stl preview.png
@@ -9,12 +9,15 @@ clean:
 stl/antenna.stl: src/antenna.js
 stl/arm.stl: src/arm.js src/connect.js src/hulls.js src/print-cylinder.js src/symmetries.js
 stl/belly.stl: src/belly.js src/horns.js src/symmetries.js
-stl/belly-camera-screw.stl: src/belly-camera-screw.js src/belly.js src/horns.js src/symmetries.js
+stl/belly-camera-screw.stl: src/belly-camera-screw.js src/belly.js src/horns.js \
+    src/symmetries.js
+stl/belly-gopro.stl: src/belly-gopro.js src/belly.js src/gopro.js src/print-cylinder.js \
+    src/symmetries.js
 stl/bind20.stl: src/bind20.js src/bind.js src/symmetries.js
 stl/bind40.stl: src/bind40.js src/bind.js src/symmetries.js
 stl/core.stl: src/core.js src/arm.js src/arrow.js src/connect.js src/frame.js \
     src/plate.js src/print-cylinder.js src/symmetries.js src/thread-insert.js
-stl/gopro.stl: src/gopro.js
+stl/gopro.stl: src/gopro.js src/print-cylinder.js src/symmetries.js
 stl/gopro-pad.stl: src/gopro-pad.js
 stl/gps.stl: src/gps.js src/symmetries.js
 stl/horns.stl: src/horns.js src/top.js src/arrow.js src/hulls.js src/plate.js

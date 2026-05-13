@@ -26,7 +26,7 @@ const batteryNegative = (batteryWidth, batteryHeight, plusLength, pillarHeight) 
 
 const batteryConnect = cuboid({ size: [40, 8, 2], center: [0, 0, 1] })
 
-const simpleBelly = (batteryWidth, batteryHeight, plusLength, pillarHeight) => {
+const simpleBelly = ({ batteryWidth = 35, batteryHeight = 27, plusLength = 14, pillarHeight = 28 } = {}) => {
   return subtract(
     union(
       xx(translateX(20, pillarPositive(pillarHeight))),
@@ -38,41 +38,33 @@ const simpleBelly = (batteryWidth, batteryHeight, plusLength, pillarHeight) => {
       batteryNegative(batteryWidth, batteryHeight, plusLength, pillarHeight)))
 }
 
-const cameraAngle = Math.PI / 12
-const screwThickness = 7
-const cameraRadius = 15 / 2
-const cameraScrewPositive = translateY(cameraRadius*2,
-  rotateX(-cameraAngle, 
-    cylinder({ radius: cameraRadius, height: screwThickness, center: [0, -cameraRadius, screwThickness / 2] })))
-const cameraScrewNegative = translateY(cameraRadius*2,
-  rotateX(-cameraAngle,
-    cylinder({ radius: 6.35 / 2, height: screwThickness, center: [0, -cameraRadius, screwThickness / 2] }),
-    cylinder({ radius: 6, height: 20, center: [0, -cameraRadius, -10] })))
-const cameraScrewConnect = cylinder({ radius: cameraRadius, height: 4, center: [0, cameraRadius, 2] })
+const pillarTs = [[20, 0], [-20, 0], [20, -20], [-20, -20]]
 
-const bellyCameraScrew = (batteryWidth, batteryHeight, plusLength, pillarHeight) => {
-  const pillarTs = [[20, 0], [-20, 0], [20, -20], [-20, -20]]
-  const cameraScrewY = plusLength + 5.6
-  return subtract(
-    union(
-      pillarTs.map((t) => translate(t, pillarPositive(pillarHeight))),
-      leg,
-      translateY(plusLength, hornPositive),
-      translateY(cameraScrewY, cameraScrewPositive),
-      hull(
-        pillarTs.map((t) => translate(t, pillarConnect)),
-        translateY(plusLength, xx(translateX(batteryWidth/2, pillarConnect))),
-        translateY(plusLength, hornConnect),
-        translateY(cameraScrewY, cameraScrewConnect))),
-    union(
-      pillarTs.map((t) => translate(t, pillarNegative(pillarHeight))),
-      translateY(cameraScrewY, cameraScrewNegative),
-      batteryNegative(batteryWidth, batteryHeight, plusLength, pillarHeight)))
+const doubleBellyPositive = ({ batteryWidth = 35, batteryHeight = 27, plusLength = 14, pillarHeight = 28 } = {}) => {
+  return union(
+    pillarTs.map((t) => translate(t, pillarPositive(pillarHeight))),
+    leg,
+    translateY(plusLength, hornPositive),
+    hull(
+      pillarTs.map((t) => translate(t, pillarConnect)),
+      translateY(plusLength, hornConnect)))
+}
+
+const doubleBellyNegative = ({ batteryWidth = 35, batteryHeight = 27, plusLength = 14, pillarHeight = 28 } = {}) => {
+  return union(
+    pillarTs.map((t) => translate(t, pillarNegative(pillarHeight))),
+    batteryNegative(batteryWidth, batteryHeight, plusLength, pillarHeight))
+}
+
+const doubleBellyConnect = ({ batteryWidth = 35, batteryHeight = 27, plusLength = 14, pillarHeight = 28 } = {}) => {
+  return hull(
+    xx(translateX(20, pillarConnect)),
+    translateY(plusLength, xx(translateX(batteryWidth/2, pillarConnect))))
 }
 
 const main = () => {
-  return simpleBelly(35, 27, 14, 28)
+  return simpleBelly()
 }
-   
-module.exports = { bellyCameraScrew, main, simpleBelly } 
+
+module.exports = { main, doubleBellyPositive, doubleBellyNegative, doubleBellyConnect, simpleBelly } 
 

@@ -4,59 +4,37 @@ const { cuboid, cylinder, sphere } = require('@jscad/modeling').primitives
 const { mirrorX, mirrorY, mirrorZ, rotate, rotateY, rotateZ, translate, translateX, translateY, translateZ } = require('@jscad/modeling').transforms
 
 const { printCylinder, printCylinderCut } = require('./print-cylinder')
-const { threadInsertPrintPositive, threadInsertPrintNegative } = require('./thread-insert')
+const { xx } = require('./symmetries')
 
-const finHeight = 15
-const centerFinWidth = 3
-const sideFinWidth = 4
-const finDistance = 3
-const slack = 0.1
-const z = 9
-const screwRadius = 5.2 / 2
-const connectHeight = 7
-const screwThickness = 2
-const threadInsertX = centerFinWidth/2 + finDistance
-const threadInsertRadius = 6
-const threadInsertLength = 7
+const finRadius = 15 / 2
 
-const finsWidth = centerFinWidth + 2*finDistance + 2*sideFinWidth
-
-const goproConnect = cuboid({
-  size: [finsWidth, finHeight, connectHeight],
-  center: [0, 0, connectHeight/2] })
-
+const fin = (x, width, radius) =>
+  rotateZ(Math.PI/2, translate([0, x, finRadius], printCylinder(radius, width)))
+const finCut = (x, width, radius) =>
+  rotateZ(Math.PI/2, translate([0, x, finRadius], printCylinderCut(radius, width)))
+  
+const cameraWidth = 3.4
+const cameraRadius = finRadius + 0.6
+const goproWidth = 4 + 3 + 3 + 3 + 4
 const goproPositive = hull(
-  translateZ(z,
-    rotateY(Math.PI/2,
-      cylinder({ radius: finHeight/2, height: finsWidth }),
-      cylinder({ radius: threadInsertRadius, height: threadInsertLength, center: [0, 0, -threadInsertX - threadInsertLength/2] }))),
-  goproConnect)
+  fin(-goproWidth/2, goproWidth, finRadius),
+  fin(3/2 + 3, 7, 5))
+const goproNegative = union(
+  xx(fin(-3 - cameraWidth/2, cameraWidth, cameraRadius)),
+  finCut(-20, 40, 5.2 / 2),
+  finCut(3/2 + 3, 7, 4),
+  finCut(3/2 + 3 + 7, 20, 5),
+  finCut(-20, 20 - goproWidth/2, 6))
+const goproConnect = cuboid({ size: [goproWidth, 6, finRadius], center: [0, 0, finRadius / 2 ] })
+const cameraFin = rotateY(Math.PI/2, cylinder({ radius: cameraRadius, height: cameraWidth, center: [0, 0, 3 / 2] }))
+const cameraNegative = (a, b) => xx(
+  translateX(3/2,
+    hull(
+      translateZ(finRadius, cameraFin),
+      translate([0, Math.sin(a)*20, finRadius + Math.cos(a)*20], cameraFin),
+      translate([0, Math.sin(b)*20, finRadius + Math.cos(b)*20], cameraFin))))
 
-const cut = finHeight * (1 - Math.cos(Math.PI/4))
-
-const finSlack = 1
-const finCut = 
-  union(
-    rotateY(Math.PI/2,
-      cylinder({
-        radius: finHeight/2 + finSlack,
-        height: finDistance,
-        center: [0, 0, -centerFinWidth/2 - finDistance/2] })),
-    cuboid({
-      size: [finDistance, 100, 200],
-      center: [-centerFinWidth/2 - finDistance/2, 0, 100 - finHeight/2 + cut - 2*finSlack] }))
-
-const goproNegative = translateZ(z,
-  rotateZ(Math.PI/2, translateY(-100, printCylinderCut(screwRadius, 200))),
-  finCut, mirrorX(finCut),
-  translateX(-threadInsertX,
-    rotateZ(-Math.PI/2,
-      threadInsertPrintNegative({ outerDiameter: 8, insertLength: threadInsertLength, screwDiameter: 5 }))),
-  rotateY(Math.PI/2,
-    cylinder({
-      radius: 6,
-      height: 200,
-      center: [0, 0, finsWidth/2 + 100] })))
+const screwThickness = 2
 
 const screwConnect = cylinder({ radius: 4, height: screwThickness, center: [0, 0, screwThickness/2] })
 const screwNegative = union(
@@ -65,20 +43,23 @@ const screwNegative = union(
 
 const a = 40
 screwTs = [[a/2, 0], [-a/2, 0]]
+const goproT = [0, 0, 2]
+const connect = cuboid({ size: [14, 12, 7], center: [0, 0, 3.5] })
 
 const gopro = subtract(
   union(
+    translate(goproT, goproPositive),
     hull(
-      goproConnect,
-      union(screwTs.map((t) => { return translate(t, screwConnect) }))),
-    goproPositive),
+      connect,
+      union(screwTs.map((t) => { return translate(t, screwConnect) })))),
   union(
-    goproNegative,
+    translate(goproT, goproNegative),
+    translate(goproT, cameraNegative(-Math.PI/4, Math.PI/4)),
     union(screwTs.map((t) => { return translate(t, screwNegative) }))))
    
 const main = () => {
   return gopro
 }
 
-module.exports = { gopro, goproConnect, goproNegative, goproPositive, main } 
+module.exports = { gopro, cameraNegative, goproPositive, goproConnect, goproNegative, goproPositive, main } 
 
