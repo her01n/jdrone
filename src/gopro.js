@@ -18,13 +18,13 @@ const cameraRadius = finRadius + 0.6
 const goproWidth = 4 + 3 + 3 + 3 + 4
 const goproPositive = hull(
   fin(-goproWidth/2, goproWidth, finRadius),
-  fin(3/2 + 3, 7, 5))
+  fin(-3/2 - 3 - 7, 7, 5))
 const goproNegative = union(
   xx(fin(-3 - cameraWidth/2, cameraWidth, cameraRadius)),
   finCut(-20, 40, 5.2 / 2),
-  finCut(3/2 + 3, 7, 4),
-  finCut(3/2 + 3 + 7, 20, 5),
-  finCut(-20, 20 - goproWidth/2, 6))
+  finCut(-3/2 - 3 - 7, 7, 4),
+  finCut(-3/2 - 3 - 7 - 20, 20, 5),
+  finCut(goproWidth/2, 20, 6))
 const goproConnect = cuboid({ size: [goproWidth, 6, finRadius], center: [0, 0, finRadius / 2 ] })
 const cameraFin = rotateY(Math.PI/2, cylinder({ radius: cameraRadius, height: cameraWidth, center: [0, 0, 3 / 2] }))
 const cameraNegative = (a, b) => xx(
